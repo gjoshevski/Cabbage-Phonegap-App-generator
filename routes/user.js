@@ -1,9 +1,10 @@
 var express = require('express');
+var compiler = require('../modules/compiler');
 var router = express.Router();
 
-/* GET users listing. */
 router.get('/', function(req, res) {
-  res.send('respond with a resource');
+  	compiler.compile();
+  	res.send('Hello World!');
 });
 
 module.exports = router;
