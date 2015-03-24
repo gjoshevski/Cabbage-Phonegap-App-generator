@@ -6,60 +6,65 @@ var exec = require('child_process').exec;
 var util = require('./util');
 
 var config =  {
+		default_module: "yo-greeting",
 		modules: [
 			{
 				name: "Greeting",
 				key: "yo-greeting",
 				element: "yo-greeting"
-			},
-			{
-				name: "List",
-				key: "yo-list",
-				element: "yo-list"
 			}
+			// },
+			// {
+			// 	name: "List",
+			// 	key: "yo-list",
+			// 	element: "yo-list"
+			// }
 		]
 	};
 
-var outputDir =  '/priv/cordova/tmp';
+var outputDir =  '/priv/cordova/www';
 var apkPath = '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk';
 
-function render() {
-	// wait.launchFiber(_render);
-	var serverDir = util.serverRootPath();
-	var fileData = wait.for(fs.readFile, serverDir+'/views/index_tmpl.hbs', 'utf8');
-	console.log(fileData);
+function compile(resp) {
+	// var stdout = wait.for(exec, 'sh '+util.serverRootPath()+'/script/compile.sh | tail');
+	if(render() === true) {
+
+		function done(stdout) {
+			if(buildCompleted(stdout) === true) {
+				returnApk(resp);
+			}
+			else {
+				console.error("compiler.js | apk read error");
+				resp.status(500);
+				resp.send("Fuk!1");	
+			}
+		}
+
+		exec('sh '+util.serverRootPath()+'/script/compile.sh yo-greeting | tail', function(error, stdout, stderr){
+			done(stdout);
+		});		
+	}
+	else {
+		console.error("compiler.js | index.html render error");
+		resp.status(500);
+		resp.send("Fuk!1");	
+	}
+	
+
 }
 
-function _render() {
+function render() {
 	var serverDir = util.serverRootPath();
 	var fileData = wait.for(fs.readFile, serverDir+'/views/index_tmpl.hbs', 'utf8');
 	if(fileData !== false) {
-		var result = wait.for(fs.writeFile, serverDir+outputDir+'/index.html', fileData);
-		return result;
+		var tmpl = hbs.compile(fileData);
+		var source = tmpl(config);
+		wait.for(fs.writeFile, serverDir+outputDir+'/index.html', source);
+		return true;
 	}
 	else {
 		return false;
 	}
-}
-
-function compile(resp) {
-	// var stdout = wait.for(exec, 'sh '+util.serverRootPath()+'/script/compile.sh | tail');
-	
-	function done(stdout) {
-		// console.log("***" + stdout);
-		if(buildCompleted(stdout) === true) {
-			returnApk(resp);
-			resp.send("Done.");
-		}
-		else {
-			resp.status(500);
-			resp.send("Fuk!1");	
-		}
-	}
-
-	exec('sh '+util.serverRootPath()+'/script/compile.sh | tail', function(error, stdout, stderr){
-		done(stdout);
-	});
 }
 
 function buildCompleted(stdout) {

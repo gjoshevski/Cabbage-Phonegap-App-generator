@@ -13,7 +13,7 @@
 	<script type="text/javascript">
 		document.addEventListener('polymer-ready', function() {
 			var app = document.querySelector('#app');
-			app.page = 'two';
+			app.page = '{{default_module}}';
 		});
 	</script>
 </head>
@@ -24,7 +24,7 @@
 
 			<core-header-panel drawer style="background-color: gray">
 				<core-toolbar>Ze Menu</core-toolbar>
-				<core-menu selected="{{page}}" valueattr="data-category">
+				<core-menu selected="\{{page}}" valueattr="data-category">
 					{{#each modules}}
 					<core-item label="{{name}}" data-category="{{key}}"></core-item>
 					{{/each}}
@@ -37,7 +37,7 @@
 					<core-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></core-icon-button>
 					<div>Ze Title</div>
 				</core-toolbar>
-				<core-pages selected="{{page}}" valueattr="data-category">
+				<core-pages selected="\{{page}}" valueattr="data-category">
 					{{#each modules}}
 					<section data-category="{{key}}">
 						<h1>{{name}}</h1>
