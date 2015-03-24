@@ -1,7 +1,7 @@
 #!/bin/sh
 
-MODULES_DIR="../../cabbage-mobile/poly/modules/"
-DESTINATION_DIR="../../cabbage-mobile/cordova/www/elements/"
+MODULES_DIR="../priv/poly/modules/"
+DESTINATION_DIR="../priv/cordova/tmp/elements/"
 
 rm -r $DESTINATION_DIR
 mkdir $DESTINATION_DIR
@@ -13,5 +13,5 @@ do
 	# echo  $MODULES_DIR$module" "$DESTINATION_DIR$module
 done
 
-cd '../../cabbage-mobile/cordova'
-exec cordova build
+# cd '../../cabbage-mobile/cordova'
+# exec cordova build
