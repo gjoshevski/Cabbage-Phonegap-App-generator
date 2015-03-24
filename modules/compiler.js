@@ -20,7 +20,8 @@ var config =  {
 		]
 	};
 
-var outputDir =  "/priv/cordova/tmp";
+var outputDir =  '/priv/cordova/tmp';
+var apkPath = '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk';
 
 function render() {
 	// wait.launchFiber(_render);
@@ -43,10 +44,11 @@ function _render() {
 
 function compile(resp) {
 	// var stdout = wait.for(exec, 'sh '+util.serverRootPath()+'/script/compile.sh | tail');
-
+	
 	function done(stdout) {
-		console.log("***" + stdout);
+		// console.log("***" + stdout);
 		if(buildCompleted(stdout) === true) {
+			returnApk(resp);
 			resp.send("Done.");
 		}
 		else {
@@ -69,16 +71,16 @@ function buildCompleted(stdout) {
 	}
 }
 
-function getApk(resp) {
-	fs.readFile('/Users/viktorot/Desktop/tmp/phonegap-test/hello/platforms/android/ant-build/MainActivity-debug.apk', function(err, data) {
+function returnApk(resp) {
+	fs.readFile(util.serverRootPath()+apkPath, function(err, data) {
 		if(!err) {
-			resp.setHeader("Content-Length", data.length);
-			resp.setHeader("Content-Type", 'application/vnd.android.package-archive');
-			resp.setHeader("Content-Disposition", 'attachment; filename=install.apk');
-			resp.statusCode = 200;
+			resp.set("Content-Length", data.length);
+			resp.set("Content-Type", 'application/vnd.android.package-archive');
+			resp.set("Content-Disposition", 'attachment; filename=install.apk');
+			resp.status(200);
 			resp.end(data);
 		} else {
-			resp.writeHead(500);
+			resp.status(500);
 			resp.end();
 		}
 	});
