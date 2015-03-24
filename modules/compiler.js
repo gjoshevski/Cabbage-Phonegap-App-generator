@@ -1,4 +1,4 @@
-var handlebars = require('express-handlebars');
+var hbs = require('hbs');
 var fs = require('fs');
 
 var config =  {
@@ -15,18 +15,17 @@ var outputDir =  "/Users/viktorot/SchoolProjects/cabbage-mobile/";
 
 function compile() {
 
-	var hbs = handlebars.create();
-
-	console.log(hbs);
+	// console.log(hbs);
 
 	function readSuccess(data) {
 		var tmpl = hbs.compile(data);
 		var source = tmpl(config);
-		writeFile(outputDir+'/index.html', source, function() { console.log('Happy :)'); });
+		console.log("11111");
+		writeFile(source, outputDir+'/index.html', function() { console.log('Happy :)'); });
 	}
 	
 	var serverDir = '/Users/viktorot/SchoolProjects/cabbage-core/'; //__dirname.split("/").splice();
-	readFile(serverDir+'views/index_tmpl.handlebars', readSuccess);
+	readFile(serverDir+'views/index_tmpl.hbs', readSuccess);
 }
 
 function readFile(sourcePath, successCallback) {
