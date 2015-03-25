@@ -7,20 +7,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
+var config = require('./util/config');
 
+/*
 var routes = require('./routes/index');
 var users = require('./routes/user');
+*/
+
 
 var app = express();
 
 // view engine setup
 
-app.engine('handlebars', exphbs({
+app.engine('hbs', exphbs({
   defaultLayout: 'main',
   partialsDir: ['views/partials/']
 }));
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'handlebars');
+app.set('view engine', 'hbs');
 
 var env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
@@ -35,8 +39,15 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
 app.use('/', routes);
 app.use('/users', users);
+*/
+
+// Globbing routing files
+    config.getGlobbedFiles('./routes/*.js').forEach(function(routePath) {
+        require(path.resolve(routePath))(app);
+    });
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
