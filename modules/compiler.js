@@ -1,4 +1,4 @@
-var hbs = require('express-handlebars');
+var hbs = require('hbs');
 var fs = require('fs');
 var wait = require('wait.for');
 var exec = require('child_process').exec;
@@ -46,7 +46,7 @@ function _compile(config, resp) {
 		}
 
 		var moduleList = config.modules.map(function(elem) { return elem.element }).join(' ');
-		exec('sh '+util.serverRootPath()+'/script/compile.sh '+ moduleList +' | tail', function(error, stdout, stderr){
+		exec('sh '+__dirname+'/script/compile.sh '+ moduleList +' | tail', function(error, stdout, stderr){
 			done(stdout);
 		});	
 	}
