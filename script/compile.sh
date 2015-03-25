@@ -15,3 +15,5 @@ done
 
 cd 'priv/cordova'
 exec cordova build
+
+# echo "BUILD SUCCESSFUL"
