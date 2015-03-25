@@ -9,11 +9,3 @@ module.exports = function(app) {
 		  res.render('modules', { title: 'Express' });
 		});
 };
-
-
-
-	app.route('/modules')
-	.get(function(req, res) {
-		  res.render('modules', { title: 'Express' });
-		});
-};

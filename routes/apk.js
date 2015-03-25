@@ -1,24 +1,20 @@
-var express = require('express');
+'use strict';
+
 var wait = require('wait.for');
 var compiler = require('../modules/compiler');
-var router = express.Router();
 
-router.get('/', function(req, resp) {
-	// wait.launchFiber(compiler.compile, resp);
-});
+module.exports = function(app) {
+	// Root routing
 
-// router.get('/get', function(req, resp) {
-// 	wait.launchFiber(compiler.compile, { appName: "ZeName", modules: ["yo-list"] }, resp);
-// });
-
-router.post('/get', function(req, resp) {
-	if(req.body.appName === undefined || req.body.modules === undefined || req.body.modules.length === 0) {
-		resp.status(400);
-		resp.send('Bad request.');
-	}
-	else {
-		wait.launchFiber(compiler.compile, req.body, resp);
-	}
-});
-
-module.exports = router;
+	app.route('/get')
+	.get(function(req, resp) {
+		console.log(req.query);
+	  	if(req.query.appName === undefined || req.query.modules === undefined || req.query.modules.length === 0) {
+			resp.status(400);
+			resp.send('Bad request.');
+		}
+		else {
+			wait.launchFiber(compiler.compile, req.query, resp);
+		}
+	});
+};

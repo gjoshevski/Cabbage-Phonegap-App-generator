@@ -1,11 +1,11 @@
-var hbs = require('hbs');
+var hbs = require('express-handlebars');
 var fs = require('fs');
 var wait = require('wait.for');
 var exec = require('child_process').exec;
 
 var util = require('./util');
 
-var outputDir =  '/priv/cordova/www';
+var outputDir =  __dirname+'/priv/cordova/www';
 var apkPath = '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk';
 
 function compile(reqBody, resp) {
@@ -28,7 +28,7 @@ function compile(reqBody, resp) {
 	// console.log(config);
 	_compile(config, resp);
 }
-
+ 
 function _compile(config, resp) {
 	// var stdout = wait.for(exec, 'sh '+util.serverRootPath()+'/script/compile.sh | tail');
 	if(render(config) === true) {
@@ -59,13 +59,12 @@ function _compile(config, resp) {
 
 }
 
-function render(config) {
-	var serverDir = util.serverRootPath();
-	var fileData = wait.for(fs.readFile, serverDir+'/views/index_tmpl.hbs', 'utf8');
+function render(config) {	
+	var fileData = wait.for(fs.readFile, __dirname+'/views/index_tmpl.hbs', 'utf8');
 	if(fileData !== false) {
 		var tmpl = hbs.compile(fileData);
 		var source = tmpl(config);
-		wait.for(fs.writeFile, serverDir+outputDir+'/index.html', source);
+		wait.for(fs.writeFile, __dirname+outputDir+'/index.html', source);
 		return true;
 	}
 	else {

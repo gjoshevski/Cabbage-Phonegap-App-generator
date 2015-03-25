@@ -9,16 +9,10 @@ var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 var config = require('./util/config');
 
-/*
-var routes = require('./routes/index');
-var users = require('./routes/user');
-*/
-
 
 var app = express();
 
 // view engine setup
-
 app.engine('hbs', exphbs({
   defaultLayout: 'main',
   partialsDir: ['views/partials/']
@@ -39,11 +33,6 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-app.use('/', routes);
-app.use('/users', users);
-*/
-
 // Globbing routing files
     config.getGlobbedFiles('./routes/*.js').forEach(function(routePath) {
         require(path.resolve(routePath))(app);
@@ -56,10 +45,6 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-/// error handlers
-
-// development error handler
-// will print stacktrace
 
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
