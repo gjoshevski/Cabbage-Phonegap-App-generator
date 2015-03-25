@@ -1,5 +1,3 @@
-
-
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -13,10 +11,10 @@ var config = require('./util/config');
 var app = express();
 
 // view engine setup
-app.engine('hbs', exphbs({
-  defaultLayout: 'main',
-  partialsDir: ['views/partials/']
-}));
+// app.engine('hbs', exphbs({
+//   defaultLayout: 'main',
+//   partialsDir: ['views/partials/']
+// }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
