@@ -2,10 +2,16 @@
 
 
 <form action="/app/search" method="post">
-  Module Name: <input type="text" name="name"><br>  
+  Module Name: <input type="text" value="{{serchString}}" name="name"><br>  
   <input type="submit" value="Search">
 </form>
 
 <br/>
 
-{{> listModules}}
+<div id="module">
+  {{#each modules}}
+  <h2>{{name}}</a></h2>
+  <div>{{desc}}</div>
+  <hr/>
+  {{/each}}
+</div>

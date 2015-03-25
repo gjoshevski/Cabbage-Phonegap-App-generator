@@ -16,7 +16,6 @@
     "wait.for":"0.6.6",
     "lodash": "~2.4.1",
     "glob": "~4.0.5"
-
   },
   "devDependencies": {
     "grunt": "~0.4.5",

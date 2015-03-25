@@ -6,19 +6,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var exphbs  = require('hbs');
+var hbs  = require('hbs');
 var config = require('./util/config');
-
+var fs = require('fs');
 
 var app = express();
 
 // view engine setup
-app.engine('hbs', exphbs({
-  defaultLayout: 'main',
-  partialsDir: ['views/partials/']
-}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+
+
+
 
 var env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
@@ -70,3 +70,20 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+
+
+
+var partialsDir = __dirname + '/views/partials';
+var filenames = fs.readdirSync(partialsDir);
+filenames.forEach(function (filename) {
+  var matches = /^([^.]+).hbs$/.exec(filename);
+  if (!matches) {
+    return;
+  }
+  var name = matches[1];
+  var template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
+  hbs.registerPartial(name, template);
+});
+
+

@@ -1,13 +1,13 @@
 module.exports = function(app) {
 	// Root routing
 
+	var core = require('../modules/core/controllers/core');
+
 	app.route('/app')
-	.get(function(req, res) {
-		  res.render('app', { title: 'Express' });
-		});
+	.get(core.all)		
+	.post(core.search);
+
 
 	app.route('/app/search')
-	.get(function(req, res) {
-		  res.render('app', { title: 'Express' });
-		});
+	.post(core.search);
 };

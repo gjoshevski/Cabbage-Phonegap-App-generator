@@ -15,9 +15,11 @@ module.exports = router;
 
 module.exports = function(app) {
 	// Root routing
+	var user = require('../modules/users/controllers/user');
 
 	app.route('/user')
 	.get(function(req, res) {
 		  res.render('user', { title: 'Users' });
-		});
+		}
+		).post(user.login);
 };
