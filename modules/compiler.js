@@ -5,7 +5,7 @@ var exec = require('child_process').exec;
 
 var util = require('./util');
 
-var outputDir =  __dirname+'/priv/cordova/www';
+var outputDir =  '/priv/cordova/www';
 var apkPath = '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk';
 
 function compile(reqBody, resp) {
@@ -46,7 +46,7 @@ function _compile(config, resp) {
 		}
 
 		var moduleList = config.modules.map(function(elem) { return elem.element }).join(' ');
-		exec('sh '+__dirname+'/script/compile.sh '+ moduleList +' | tail', function(error, stdout, stderr){
+		exec('sh '+util.serverRootPath()+'/script/compile.sh '+ moduleList +' | tail', function(error, stdout, stderr){
 			done(stdout);
 		});	
 	}
@@ -60,11 +60,11 @@ function _compile(config, resp) {
 }
 
 function render(config) {	
-	var fileData = wait.for(fs.readFile, __dirname+'/views/index_tmpl.hbs', 'utf8');
+	var fileData = wait.for(fs.readFile, util.serverRootPath()+'/views/index_tmpl.hbs', 'utf8');
 	if(fileData !== false) {
 		var tmpl = hbs.compile(fileData);
 		var source = tmpl(config);
-		wait.for(fs.writeFile, __dirname+outputDir+'/index.html', source);
+		wait.for(fs.writeFile, util.serverRootPath()+outputDir+'/index.html', source);
 		return true;
 	}
 	else {
@@ -90,6 +90,7 @@ function returnApk(appName, resp) {
 			resp.status(200);
 			resp.end(data);
 		} else {
+			console.log("compiler.js | get apk error");
 			resp.status(500);
 			resp.end();
 		}
