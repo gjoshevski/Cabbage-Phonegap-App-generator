@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
   	table.string('description');
   	table.string('image');
   	table.float('price');
-  	table.timestamp('created');
+  	table.timestamps();
   });
   
 };
