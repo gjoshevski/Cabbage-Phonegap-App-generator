@@ -2,14 +2,17 @@
 
 exports.up = function(knex, Promise) {
 
-  return knex.schema.createTable('companies', function(table){
+  return knex.schema.createTable('menu', function(table){
   	table.increments('id');
   	table.string('name');
-  	table.integer('timestamp');
+  	table.string('description');
+  	table.string('image');
+  	table.float('price');
+  	table.timestamp('created');
   });
   
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTable('companies');
+  return knex.schema.dropTable('menu');
 };
