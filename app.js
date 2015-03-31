@@ -1,5 +1,3 @@
-
-
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,6 +7,8 @@ var bodyParser = require('body-parser');
 var hbs  = require('hbs');
 var config = require('./util/config');
 var fs = require('fs');
+var knex = require('knex')(require('./knexfile').development);
+var bookshelf = require('bookshelf')(knex);
 
 var app = express();
 
@@ -27,10 +27,7 @@ app.set('view engine', 'hbs');
 // 	var template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
 // 	hbs.registerPartial(name, template);
 // });
-
-// load view partials
 hbs.registerPartials(__dirname + '/views/partials');
-
 
 var env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
