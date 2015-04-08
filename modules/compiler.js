@@ -28,7 +28,7 @@ function compile(reqBody, resp) {
 	// console.log(config);
 	_compile(config, resp);
 }
- 
+
 function _compile(config, resp) {
 	// var stdout = wait.for(exec, 'sh '+util.serverRootPath()+'/script/compile.sh | tail');
 	if(render(config) === true) {
@@ -41,25 +41,25 @@ function _compile(config, resp) {
 			else {
 				console.error('compiler.js | apk read error');
 				resp.status(500);
-				resp.send('Fuk!1');	
+				resp.send('Fuk!1');
 			}
 		}
 
 		var moduleList = config.modules.map(function(elem) { return elem.element }).join(' ');
 		exec('sh '+util.serverRootPath()+'/script/compile.sh '+ moduleList +' | tail', function(error, stdout, stderr){
 			done(stdout);
-		});	
+		});
 	}
 	else {
 		console.error('compiler.js | index.html render error');
 		resp.status(500);
-		resp.send('Fuk!1');	
+		resp.send('Fuk!1');
 	}
-	
+
 
 }
 
-function render(config) {	
+function render(config) {
 	var fileData = wait.for(fs.readFile, util.serverRootPath()+'/views/index_tmpl.hbs', 'utf8');
 	if(fileData !== false) {
 		var tmpl = hbs.compile(fileData);

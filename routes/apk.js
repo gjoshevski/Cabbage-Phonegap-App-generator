@@ -15,9 +15,4 @@ module.exports = function(app) {
 			wait.launchFiber(compiler.compile, req.query, resp);
 		}
 	});
-	app.route('/apk/menu').get(function(req, resp) {
-		dbModels.Menu.fetchAll().then(function(contacts) {
-			 resp.send('{"menu:" ' + JSON.stringify(contacts) + '}');
-		});
-	});
 };
