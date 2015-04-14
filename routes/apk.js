@@ -15,6 +15,7 @@ module.exports = function(app) {
 		}
 		else {
 			wait.launchFiber(compiler.compile, req.query, resp);
+			//resp.send('Ok.');
 		}
 	});
 };
