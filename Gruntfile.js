@@ -1,79 +1,177 @@
 'use strict';
 
-var request = require('request');
+module.exports = function(grunt) {
+	// Unified Watch Object
+	var watchFiles = {
+		serverViews: ['app/views/**/*.*'],
+		serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
+		clientViews: ['public/modules/**/views/**/*.html'],
+		clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
+		clientCSS: ['public/modules/**/*.css'],
+		mochaTests: ['app/tests/**/*.js']
+	};
 
-module.exports = function (grunt) {
-  // show elapsed time at the end
-  require('time-grunt')(grunt);
-  // load all grunt tasks
-  require('load-grunt-tasks')(grunt);
+	// Project Configuration
+	grunt.initConfig({
+		pkg: grunt.file.readJSON('package.json'),
+		watch: {
+			serverViews: {
+				files: watchFiles.serverViews,
+				options: {
+					livereload: true
+				}
+			},
+			serverJS: {
+				files: watchFiles.serverJS,
+				tasks: ['jshint'],
+				options: {
+					livereload: true
+				}
+			},
+			clientViews: {
+				files: watchFiles.clientViews,
+				options: {
+					livereload: true,
+				}
+			},
+			clientJS: {
+				files: watchFiles.clientJS,
+				tasks: ['jshint'],
+				options: {
+					livereload: true
+				}
+			},
+			clientCSS: {
+				files: watchFiles.clientCSS,
+				tasks: ['csslint'],
+				options: {
+					livereload: true
+				}
+			}
+		},
+		jshint: {
+			all: {
+				src: watchFiles.clientJS.concat(watchFiles.serverJS),
+				options: {
+					jshintrc: true
+				}
+			}
+		},
+		csslint: {
+			options: {
+				csslintrc: '.csslintrc',
+			},
+			all: {
+				src: watchFiles.clientCSS
+			}
+		},
+		uglify: {
+			production: {
+				options: {
+					mangle: false
+				},
+				files: {
+					'public/dist/application.min.js': 'public/dist/application.js'
+				}
+			}
+		},
+		cssmin: {
+			combine: {
+				files: {
+					'public/dist/application.min.css': '<%= applicationCSSFiles %>'
+				}
+			}
+		},
+		nodemon: {
+			dev: {
+				script: 'server.js',
+				options: {
+					nodeArgs: ['--debug'],
+					ext: 'js,html',
+					watch: watchFiles.serverViews.concat(watchFiles.serverJS)
+				}
+			}
+		},
+		'node-inspector': {
+			custom: {
+				options: {
+					'web-port': 1337,
+					'web-host': 'localhost',
+					'debug-port': 5858,
+					'save-live-edit': true,
+					'no-preload': true,
+					'stack-trace-limit': 50,
+					'hidden': []
+				}
+			}
+		},
+		ngAnnotate: {
+			production: {
+				files: {
+					'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
+				}
+			}
+		},
+		concurrent: {
+			default: ['nodemon', 'watch'],
+			debug: ['nodemon', 'watch', 'node-inspector'],
+			options: {
+				logConcurrentOutput: true,
+				limit: 10
+			}
+		},
+		env: {
+			test: {
+				NODE_ENV: 'test'
+			},
+			secure: {
+				NODE_ENV: 'secure'
+			}
+		},
+		mochaTest: {
+			src: watchFiles.mochaTests,
+			options: {
+				reporter: 'spec',
+				require: 'server.js'
+			}
+		},
+		karma: {
+			unit: {
+				configFile: 'karma.conf.js'
+			}
+		}
+	});
 
-  var reloadPort = 35729, files;
+	// Load NPM tasks
+	require('load-grunt-tasks')(grunt);
 
-  grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    develop: {
-      server: {
-        file: 'bin/www'
-      }
-    },
-    watch: {
-      options: {
-        nospawn: true,
-        livereload: reloadPort
-      },
-      server: {
-        files: [
-          'bin/www',
-          'app.js',
-          'routes/*.js'
-        ],
-        tasks: ['develop', 'delayed-livereload']
-      },
-      js: {
-        files: ['public/js/*.js'],
-        options: {
-          livereload: reloadPort
-        }
-      },
-      css: {
-        files: [
-          'public/css/*.css'
-        ],
-        options: {
-          livereload: reloadPort
-        }
-      },
-      views: {
-        files: ['views/*.handlebars'],
-        options: {
-          livereload: reloadPort
-        }
-      }
-    }
-  });
+	// Making grunt default to force in order not to break the project.
+	grunt.option('force', true);
 
-  grunt.config.requires('watch.server.files');
-  files = grunt.config('watch.server.files');
-  files = grunt.file.expand(files);
+	// A Task for loading the configuration object
+	grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function() {
+		var init = require('./config/init')();
+		var config = require('./config/config');
 
-  grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
-    var done = this.async();
-    setTimeout(function () {
-      request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function (err, res) {
-          var reloaded = !err && res.statusCode === 200;
-          if (reloaded) {
-            grunt.log.ok('Delayed live reload successful.');
-          } else {
-            grunt.log.error('Unable to make a delayed live reload.');
-          }
-          done(reloaded);
-        });
-    }, 500);
-  });
+		grunt.config.set('applicationJavaScriptFiles', config.assets.js);
+		grunt.config.set('applicationCSSFiles', config.assets.css);
+	});
 
-  grunt.registerTask('default', [
-    'develop',
-    'watch'
-  ]);
+	// Default task(s).
+	grunt.registerTask('default', ['lint', 'concurrent:default']);
+
+	// Debug task.
+	grunt.registerTask('debug', ['lint', 'concurrent:debug']);
+
+	// Secure task(s).
+	grunt.registerTask('secure', ['env:secure', 'lint', 'concurrent:default']);
+
+	// Lint task(s).
+	grunt.registerTask('lint', ['jshint', 'csslint']);
+
+	// Build task(s).
+	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
+
+	// Test task.
+	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
 };
