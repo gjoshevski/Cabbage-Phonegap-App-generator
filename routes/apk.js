@@ -1,15 +1,13 @@
-'use strict';
-
 var wait = require('wait.for');
 var compiler = require('../modules/compiler');
+var dbModels = require('../db/models/models');
+var knex = require('knex')(require('../knexfile').development);
+var bookshelf = require('bookshelf')(knex);
 
 module.exports = function(app) {
-	// Root routing
-
-	app.route('/get')
-	.get(function(req, resp) {
+	app.route('/apk').get(function(req, resp) {
 		console.log(req.query);
-	  	if(req.query.appName === undefined || req.query.modules === undefined || req.query.modules.length === 0) {
+		if(req.query.appName === undefined || req.query.modules === undefined || req.query.modules.length === 0) {
 			resp.status(400);
 			resp.send('Bad request.');
 		}
