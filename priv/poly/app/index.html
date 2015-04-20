@@ -38,18 +38,11 @@
 
 <body fullbleed layout vertical>
 
-	<!-- <app-router>
-		<app-route is="pushstate-anchor" path="/" import="elements/yo-greeting/yo-greeting.html" template active="active"></app-route>
-		<app-route is="pushstate-anchor" path="/yo-list" import="elements/yo-list/yo-list.html"></app-route>
-		<app-route is="pushstate-anchor" path="/menu" import="elements/cabbage-menu/cabbage-menu.html"></app-route>
-		<app-route is="pushstate-anchor" path="/menu/:id" import="elements/cabbage-menu-view/cabbage-menu-view.html"></app-route>
-	</app-router> -->
-
 	<more-routing-config driver="hash"></more-routing-config>
 	<more-route name="greeting" path="/greeting"></more-route>
 	<more-route name="list" path="/list"></more-route>
 	<more-route name="menu" path="/menu">
-		<more-route name="menu-info" path="/:id">
+		<more-route name="menu-info" path="/:id"></more-route>
 	</more-route>
 
 	<template is="auto-binding" id="app">

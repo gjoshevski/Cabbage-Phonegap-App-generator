@@ -1,10 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="cabbage-menu-item" attributes="price name" on-click="{{ onMenuClick }}">
+<polymer-element name="cabbage-menu-item" attributes="menuId price name image" on-click="{{ onMenuClick }}">
     <template>
         <div class="content" horizontal layout center>
             <core-image  preload fade sizing="cover"
-                         src="http://i1093.photobucket.com/albums/i422/rcheung28/forum/Droid_zpsa8eed316.jpg">
+                         src="{{ image }}">
             </core-image>
             <div vertical layout left>
                 <h3>Name: {{ name }}</h3>
@@ -24,7 +24,7 @@
         (function() {
             Polymer({
                 onMenuClick: function() {
-                    this.fire('cbg-menu-item-click', {name: this.name, price: this.price})
+                    this.fire('cbg-menu-item-click', {id: this.menuId})
                 }
             });
         })();

@@ -2,6 +2,14 @@
 
 <polymer-element name="cabbage-menu-view" attributes="menuId">
     <template>
+
+        <core-ajax  id="getRepos"
+                    url="http://127.0.0.1:3000/api/menu"
+                    menthod="GET",
+                    handleAs="json"
+                    params="{{ {id: menuId} }}"
+                    on-core-response="{{ onMenuInfoReceived }}"></core-ajax>
+
         <core-scroll-header-panel condenses>
             <core-toolbar class="medium-tall">
                 <div>Hello World! => {{ menuId }}</div>
@@ -39,7 +47,15 @@
             Polymer({
                 menuIdChanged: function(oldVal, newVal) {
                     console.log("menuId changed => " + newVal);
+                    this.getMenuInfo();
+                },
+                getMenuInfo: function() {
+                    this.$.getRepos.go();
+                },
+                onMenuInfoReceived: function(data) {
+                    console.log("github response => " + JSON.stringify(data.detail.response));
                 }
+
             });
         })();
     </script>
