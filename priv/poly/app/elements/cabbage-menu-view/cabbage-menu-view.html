@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-menu-view" attributes="menuId">
+    <template>
+        <core-scroll-header-panel condenses>
+            <core-toolbar class="medium-tall">
+                <div>Hello World! => {{ menuId }}</div>
+            </core-toolbar>
+
+            <core-field>
+                <core-icon icon="fruit:cherry"></core-icon>
+                <input placeholder="Item name" flex>
+            </core-field>
+        </core-scroll-header-panel>
+        <style>
+            /*:host   { background-color: pink; width: 100% height: 100%; display: block; }*/
+            core-scroll-header-panel {
+                /*position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;*/
+                height: 500px;
+            }
+            core-scroll-header-panel::shadow #headerBg {
+                /*background-image: url('http://www.thecarbonfiberjournal.com/wp-content/uploads/2011/12/2009-Aston-Martin-One-77-Front-Angle-Tilt-1280x960.jpg');*/
+                background-color: red;
+            }
+            core-scroll-header-panel::shadow #condensedHeaderBg {
+                background-color: blue;
+            }
+            core-toolbar {
+                background-color: transparent;
+            }
+        </style>
+    </template>
+    <script>
+        (function() {
+            Polymer({
+                menuIdChanged: function(oldVal, newVal) {
+                    console.log("menuId changed => " + newVal);
+                }
+            });
+        })();
+    </script>
+</polymer-element>

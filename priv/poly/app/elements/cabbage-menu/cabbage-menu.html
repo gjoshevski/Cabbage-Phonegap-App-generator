@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-menu" attributes="menu">
+    <template>
+        <template repeat="{{ item in menu }}">
+            <cabbage-menu-item name="{{ item.name }}" price="{{ item.price }}"></cabbage-menu-item>
+        </template>
+    </template>
+    <script>
+        (function() {
+            Polymer({
+                ready: function() {
+                    this.menu = [
+                                    {name: "Cyka", price: "12"},
+                                    {name: "asd", price: "12"},
+                                    {name: "sad", price: "21"},
+                                    {name: "faw", price: "13252"},
+                                ];
+                    this.addEventListener('cbg-menu-item-click', this.onMenuItemClicked);
+                },
+                onMenuItemClicked: function(event) {
+                    MoreRouting.navigateTo('menu-info', {id: event.detail.price});
+                }
+            });
+        })();
+    </script>
+</polymer-element>
