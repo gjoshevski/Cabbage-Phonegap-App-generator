@@ -3,59 +3,76 @@
 <polymer-element name="cabbage-menu-view" attributes="menuId">
     <template>
 
+        <core-localstorage id="storage" name="cabbage-localstorage-menu"></core-localstorage>
+
         <core-ajax  id="getRepos"
                     url="http://127.0.0.1:3000/api/menu"
                     menthod="GET",
                     handleAs="json"
                     params="{{ {id: menuId} }}"
-                    on-core-response="{{ onMenuInfoReceived }}"></core-ajax>
+                    on-core-response="{{ onMenuInfoReceived }}"
+                    on-core-error="{{ onMenuInfoError }}"></core-ajax>
 
-        <core-scroll-header-panel condenses>
-            <core-toolbar class="medium-tall">
-                <div>Hello World! => {{ menuId }}</div>
-            </core-toolbar>
+        <core-image id="image" preload fade fullbleed sizing="cover"
+                    src="{{ image }}">
+        </core-image>
+        <h1 flex>Name: {{ name }}</h1>
+        <h3 flex>Price: ${{ price }}</h2>
+        <h3>Description:</h3>
+        <p>{{ description }}</p>
 
-            <core-field>
-                <core-icon icon="fruit:cherry"></core-icon>
-                <input placeholder="Item name" flex>
-            </core-field>
-        </core-scroll-header-panel>
         <style>
-            /*:host   { background-color: pink; width: 100% height: 100%; display: block; }*/
-            core-scroll-header-panel {
-                /*position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;*/
-                height: 500px;
+            :host {
+                display: block;
+                width: 100%;
+                margin-right: 200px;
             }
-            core-scroll-header-panel::shadow #headerBg {
-                /*background-image: url('http://www.thecarbonfiberjournal.com/wp-content/uploads/2011/12/2009-Aston-Martin-One-77-Front-Angle-Tilt-1280x960.jpg');*/
-                background-color: red;
-            }
-            core-scroll-header-panel::shadow #condensedHeaderBg {
-                background-color: blue;
-            }
-            core-toolbar {
-                background-color: transparent;
+            #image {
+                background-color: pink;
+                width: 100%;
+                height: 200px;
             }
         </style>
     </template>
     <script>
         (function() {
             Polymer({
+                ready: function() {
+                    this.name = '';
+                    this.price = '';
+                    this.description = '';
+                    this.image = '';
+                },
                 menuIdChanged: function(oldVal, newVal) {
-                    console.log("menuId changed => " + newVal);
+                    // console.log("menuId changed => " + newVal);
                     this.getMenuInfo();
                 },
                 getMenuInfo: function() {
                     this.$.getRepos.go();
                 },
                 onMenuInfoReceived: function(data) {
-                    console.log("github response => " + JSON.stringify(data.detail.response));
-                }
+                    this.displayInfo(data.detail.response);
+                },
+                onMenuInfoError: function() {
+                    var storageData = this.$.storage.value;
+                    var res = undefined;
+                    for(var i = 0; i < storageData.length; i++) {
+                        if(storageData[i].id === parseInt(this.menuId)) {
+                            res = storageData[i];
+                            break;
+                        }
+                    }
 
+                    if(res !== undefined) {
+                        this.displayInfo(res);
+                    }
+                },
+                displayInfo: function(menuInfo) {
+                    this.image = menuInfo.image;
+                    this.name = menuInfo.name;
+                    this.price = menuInfo.price;
+                    this.description = menuInfo.description;
+                }
             });
         })();
     </script>

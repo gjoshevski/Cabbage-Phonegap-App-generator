@@ -8,29 +8,51 @@
 	<link rel="import" href="elements/elements.html">
 
 	<style type="text/css">
-		core-drawer-panel:not([narrow]) #navicon {display: none}
-		.content			{background-color: lightgray; width: 100%; height: 100%}
-		cabbage-menu 		{display: block;}
+		core-drawer-panel:not([narrow]) #navicon {
+			display: none;
+		}
+
+		.content {
+			background-color: lightgray;
+			width: 100%;
+			height: 100%
+		}
+
+		section {
+			display: block;
+			/*padding: 20px 100px;*/
+			width: 100%;
+			height: 100%;
+		}
+
+		/*core-scroll-header-panel {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+		}*/
+
+		core-scroll-header-panel::shadow #mainContainer {
+			background-color: lightgray;
+		}
+
+		core-scroll-header-panel::shadow #headerBg {
+			background-color: green;
+		}
+
+		core-scroll-header-panel::shadow #condensedHeaderBg {
+			background-color: blue;
+		}
+
+		#main-title {
+			background-color: transparent;
+		}
+
 	</style>
 
 	<script type="text/javascript">
 		document.addEventListener('polymer-ready', function() {
-			// var app = document.querySelector('#app');
-			//
-			// page("/greeting", function() {
-			// 	app.route = "yo-greeting";
-			// });
-			//
-			// page("/list", function() {
-			// 	app.route = "yo-list";
-			// });
-			//
-			// page("/menu/:id", function(data) {
-			// 	// app.route = "yo-list";
-			// 	console.log(data)
-			// });
-			//
-			// page({ hashbang: true });
 		});
 
 	</script>
@@ -66,32 +88,28 @@
 			</core-header-panel>
 
 
-			<core-header-panel main>
-				<core-toolbar>
+			<core-scroll-header-panel headerHeight="500" condensedHeaderHeight="150" main condenses tall>
+				<core-toolbar id="main-title" class="tall" layout horizontal end>
 					<core-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></core-icon-button>
-					<div>Ze Title</div>
+					<h1>Ze Title</h1>
 				</core-toolbar>
 				<more-route-selector selectedParams="{{ params }}">
 					<core-pages>
 						<section route="greeting">
-							<h1>Greeting</h1>
 							<yo-greeting></yo-greeting>
 						</section>
 						<section route="list">
-							<h1>List</h1>
 							<yo-list></yo-list>
 						</section>
 						<section route="menu">
-							<h1>Menu</h1>
 							<cabbage-menu></cabbage-menu>
 						</section>
 						<section route="menu-info">
-							<h1>Menu-Info</h1>
 							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
 						</section>
 					</core-pages>
 				</more-route-selector>
-			</core-header-panel>
+			</core-scroll-header-panel>
 
 		</core-drawer-panel>
 	</template>

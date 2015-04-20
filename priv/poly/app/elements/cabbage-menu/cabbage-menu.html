@@ -3,6 +3,8 @@
 <polymer-element name="cabbage-menu" attributes="menu">
     <template>
 
+        <core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage>
+
         <core-ajax  id="getMenu"
                     auto
                     url="http://127.0.0.1:3000/api/menu"
