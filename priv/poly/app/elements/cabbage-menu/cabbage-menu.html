@@ -19,6 +19,11 @@
                                 price="{{ item.price }}"
                                 image="{{ item.image }}"></cabbage-menu-item>
         </template>
+
+        <div horizontal end-justified layout>
+            <paper-fab icon="add" on-click="{{ onAddButtonClick }}" style="background-color: green;"></paper-fab>
+        </div>
+
     </template>
     <script>
         (function() {
@@ -32,6 +37,9 @@
                 },
                 onMenuDataReceived: function(data) {
                     this.menu = data.detail.response;
+                },
+                onAddButtonClick: function() {
+                    MoreRouting.navigateTo('menu-add');
                 }
             });
         })();

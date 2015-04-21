@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-menu-item-add">
+	<template>
+
+		<core-ajax  id="addMenu"
+					url="http://127.0.0.1:3000/api/menu"
+					method="POST"
+					handleAs="json"
+					contentType="application/json"
+					on-core-response="{{ onMenuItemSaveResponse }}"
+					on-core-error="{{ onMenuItemSavError }}"></core-ajax>
+
+		<paper-input id="name" label="Name"></paper-input>
+		<paper-input id="price" label="Price"></paper-input>
+		<paper-input id="image" label="Image URL"></paper-input>
+		<paper-input id="description" label="Description"></paper-input>
+
+		<div horizontal end-justified layout>
+			<paper-fab icon="save" on-click="{{ onSaveButtonClick }}" style="background-color: green;"></paper-fab>
+		</div>
+
+		<style>
+			paper-input   { display: block; }
+		</style>
+	</template>
+
+	<script>
+		(function() {
+			Polymer({
+				getData: function() {
+					return {
+						'name': this.$.name.value,
+						'description': this.$.description.value,
+						'image': this.$.image.value,
+						'price': this.$.price.value
+					};
+				},
+				onSaveButtonClick: function() {
+					this.$.addMenu.body = JSON.stringify(this.getData());
+					this.$.addMenu.go();
+				},
+				onMenuItemSaveResponse: function() {
+					MoreRouting.navigateTo('menu');
+				},
+				onMenuItemSaveError: function() {
+					console.log('!2');
+				}
+			});
+		})();
+	</script>
+</polymer-element>

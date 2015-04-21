@@ -65,6 +65,7 @@
 	<more-route name="list" path="/list"></more-route>
 	<more-route name="menu" path="/menu">
 		<more-route name="menu-info" path="/:id"></more-route>
+		<more-route name="menu-add" path="/new"></more-route>
 	</more-route>
 
 	<template is="auto-binding" id="app">
@@ -106,6 +107,9 @@
 						</section>
 						<section route="menu-info">
 							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
+						</section>
+						<section route="menu-add">
+							<cabbage-menu-item-add></cabbage-menu-item-add>
 						</section>
 					</core-pages>
 				</more-route-selector>
