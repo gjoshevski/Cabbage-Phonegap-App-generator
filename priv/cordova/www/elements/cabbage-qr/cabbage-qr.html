@@ -38,7 +38,7 @@
 				code: '',
 				ready: function() {
 					this.code = '[nothing]';
-					// CabbageQr.init();
+					CabbageQr.init();
 				},
 				onScanQrClick: function() {
 					var self = this;
@@ -50,7 +50,7 @@
 						console.log(result);
 					};
 
-					// CabbageQr.scan(success, error);
+					CabbageQr.scan(success, error);
 				}
 			});
 		})();
