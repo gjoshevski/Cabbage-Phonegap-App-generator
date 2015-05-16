@@ -1,0 +1,9 @@
+var CabbageConf = {
+	config: function() {
+		return {
+			{{#each config}}
+			'{{key}}': '{{value}}'
+			{{/each}}
+		}
+	}
+}
