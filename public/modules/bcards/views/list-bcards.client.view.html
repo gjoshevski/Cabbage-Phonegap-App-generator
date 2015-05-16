@@ -1,0 +1,19 @@
+<section data-ng-controller="BcardsController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Bcards</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="bcard in bcards" data-ng-href="#!/bcards/{{bcard._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="bcard.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="bcard.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="bcard.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!bcards.$resolved || bcards.length">
+    	No Bcards yet, why don't you <a href="/#!/bcards/create">create one</a>?
+    </div>
+</section>
