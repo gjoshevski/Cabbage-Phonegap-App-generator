@@ -1,0 +1,65 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-binfo">
+    <template>
+        <style>
+            core-list {
+                height: 940px;
+            }
+            
+            .mylist {
+                height: 940px;
+            }
+        </style>
+        <core-ajax id="ajax" auto url="http://localhost:3000/comments" method="GET" handleAs="json"  on-core-complete="{{responseHandler}}">
+        </core-ajax>
+
+        <core-toolbar class="tall">
+            <div flex=""></div>
+            <div class="bottom indent title" style="-webkit-transform: scale(1) translateZ(0px); transform: scale(1) translateZ(0px);">Bussines name</div>
+        </core-toolbar>
+        <hr></hr>
+
+        <core-list data="{{comments}}" fluid>
+            <template>
+
+                <div class="item">
+                    <h2>{{ model.name }} </h2> {{ model.comment }}
+                    <hr></hr>
+                </div>
+
+            </template>
+        </core-list>
+
+    </template>
+    <script>
+        Polymer('cabbage-binfo', {
+            responseHandler: function (event, detail, sender) {
+                //  console.log(detail.xhr.response);
+                var response = JSON.parse(detail.xhr.response);
+                if (typeof response == 'object') {
+                    this.comments = response;
+                    localStorage.setItem('comments', detail.xhr.response);
+                    console.log(detail.xhr);
+                } else {
+                    console.log("Error response");
+                }
+            },
+            comments: [{
+                    comment: "Here goes the comment",
+                    name: "Name"
+                    },
+                  ],
+            ready: function () {
+                // Retrieve the object from storage
+                var retrievedObject = localStorage.getItem('comments');
+                try{
+                    this.comments = JSON.parse(retrievedObject);
+           
+                }catch(err){
+                    console.log(retrievedObject);
+                    }
+                 }
+        });
+    </script>
+</polymer-element>

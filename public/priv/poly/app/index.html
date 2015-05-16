@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
+	<link rel="import" href="elements/elements.html">
+
+	<style type="text/css">
+		core-drawer-panel:not([narrow]) #navicon {display: none}
+		.content			{background-color: lightgray; width: 100%; height: 100%}
+		cabbage-menu 		{display: block;}
+	</style>
+
+	<script type="text/javascript">
+		document.addEventListener('polymer-ready', function() {
+		});
+
+	</script>
+</head>
+
+<body fullbleed layout vertical>
+
+	<!-- <app-router>
+		<app-route is="pushstate-anchor" path="/" import="elements/yo-greeting/yo-greeting.html" template active="active"></app-route>
+		<app-route is="pushstate-anchor" path="/yo-list" import="elements/yo-list/yo-list.html"></app-route>
+		<app-route is="pushstate-anchor" path="/menu" import="elements/cabbage-menu/cabbage-menu.html"></app-route>
+		<app-route is="pushstate-anchor" path="/menu/:id" import="elements/cabbage-menu-view/cabbage-menu-view.html"></app-route>
+	</app-router> -->
+
+	<more-routing-config driver="hash"></more-routing-config>
+	<more-route name="greeting" path="/greeting"></more-route>
+	<more-route name="list" path="/list"></more-route>
+	<more-route name="menu" path="/menu">
+        <more-route name="menu-info" path="/:id"> </more-route>
+	</more-route>
+          <more-route name="binfo" path="/binfo"></more-route>
+  
+
+	<template is="auto-binding" id="app">
+		<core-drawer-panel id="drawer">
+
+			<core-header-panel drawer style="background-color: gray">
+				<core-toolbar>Ze Menu</core-toolbar>
+				<more-route-selector>
+					<core-menu>
+						<core-item label="Greeting" route="greeting">
+							<a href="{{ urlFor('greeting') }}"></a>
+						</core-item>
+						<core-item label="List" route="list">
+							<a href="{{ urlFor('list') }}"></a>
+						</core-item>
+						<core-item label="Menu" route="menu">
+							<a href="{{ urlFor('menu') }}"></a>
+						</core-item>
+                        <core-item label="Info" route="binfo">  
+							<a href="{{ urlFor('binfo') }}"></a>
+						</core-item>
+					</core-menu>
+				</more-route-selector>
+			</core-header-panel>
+
+
+			<core-header-panel main>
+				<core-toolbar>
+					<core-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></core-icon-button>
+					<div>Ze Title</div>
+				</core-toolbar>
+				<more-route-selector selectedParams="{{ params }}">
+					<core-pages>
+						<section route="greeting">
+							<h1>Greeting</h1>
+							<yo-greeting></yo-greeting>
+						</section>
+						<section route="list">
+							<h1>List</h1>
+							<yo-list></yo-list>
+						</section>
+						<section route="menu">
+							<h1>Menu</h1>
+							<cabbage-menu></cabbage-menu>
+						</section>
+						<section route="menu-info">
+							<h1>Menu-Info</h1>
+							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
+						</section>
+                        <section route="binfo">							
+							<cabbage-binfo></cabbage-binfo>
+						</section>
+					</core-pages>
+				</more-route-selector>
+			</core-header-panel>
+
+		</core-drawer-panel>
+	</template>
+
+
+
+</body>
+</html>
