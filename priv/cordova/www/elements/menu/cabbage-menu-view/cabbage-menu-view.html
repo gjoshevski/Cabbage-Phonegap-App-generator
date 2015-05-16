@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-menu-view" attributes="menuId">
+    <template>
+
+        <core-localstorage id="storage" name="cabbage-localstorage-menu"></core-localstorage>
+
+        <core-ajax  id="getRepos"
+                    url="http://192.168.0.16:3000/api/menu"
+                    menthod="GET",
+                    handleAs="json"
+                    params="{{ {id: menuId} }}"
+                    on-core-response="{{ onMenuInfoReceived }}"
+                    on-core-error="{{ onMenuInfoError }}"></core-ajax>
+
+        <core-image id="image" preload fade fullbleed sizing="cover"
+                    src="{{ image }}">
+        </core-image>
+        <h1 flex>Name: {{ name }}</h1>
+        <h3 flex>Price: ${{ price }}</h2>
+        <h3>Description:</h3>
+        <p>{{ description }}</p>
+
+        <style>
+            :host {
+                display: block;
+                width: 100%;
+                margin-right: 200px;
+            }
+            #image {
+                background-color: pink;
+                width: 100%;
+                height: 200px;
+            }
+        </style>
+    </template>
+    <script>
+        (function() {
+            Polymer({
+                ready: function() {
+                    this.name = '';
+                    this.price = '';
+                    this.description = '';
+                    this.image = '';
+                },
+                menuIdChanged: function(oldVal, newVal) {
+                    // console.log("menuId changed => " + newVal);
+                    this.getMenuInfo();
+                },
+                getMenuInfo: function() {
+                    this.$.getRepos.go();
+                },
+                onMenuInfoReceived: function(data) {
+                    this.displayInfo(data.detail.response);
+                },
+                onMenuInfoError: function() {
+                    var storageData = this.$.storage.value;
+                    var res = undefined;
+                    for(var i = 0; i < storageData.length; i++) {
+                        if(storageData[i].id === parseInt(this.menuId)) {
+                            res = storageData[i];
+                            break;
+                        }
+                    }
+
+                    if(res !== undefined) {
+                        this.displayInfo(res);
+                    }
+                },
+                displayInfo: function(menuInfo) {
+                    this.image = menuInfo.image;
+                    this.name = menuInfo.name;
+                    this.price = menuInfo.price;
+                    this.description = menuInfo.description;
+                }
+            });
+        })();
+    </script>
+</polymer-element>
