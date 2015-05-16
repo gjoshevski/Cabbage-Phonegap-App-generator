@@ -42,7 +42,9 @@ module.exports = function(app)  {
 		console.log("body =>" + JSON.stringify(req.body));
 		if(cabbageValidator.Menu.validateInsert(req.body) === true) {
 			new dbModels.Menu().save(req.body).then(function (result) {
-				resp.sendStatus(200);
+				var id = result.get("id")
+				resp.json({id: id});
+				// resp.sendStatus(200);
 			})
 			.catch(function(error) {
 				console.log(error);

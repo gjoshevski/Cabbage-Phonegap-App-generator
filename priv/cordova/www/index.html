@@ -4,51 +4,18 @@
 	<title></title>
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 	<meta content="utf-8" http-equiv="encoding">
-	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
+	<link rel="stylesheet" href="css/main.css">
 	<link rel="import" href="elements/elements.html">
+
+	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="barcodescanner.js"></script>
+	<script type="text/javascript" src="script/qr.js"></script>
 
 	<style type="text/css">
 		core-drawer-panel:not([narrow]) #navicon {
 			display: none;
 		}
-
-		.content {
-			background-color: lightgray;
-			width: 100%;
-			height: 100%
-		}
-
-		section {
-			display: block;
-			/*padding: 20px 100px;*/
-			width: 100%;
-			height: 100%;
-		}
-
-		/*core-scroll-header-panel {
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-		}*/
-
-		core-scroll-header-panel::shadow #mainContainer {
-			background-color: lightgray;
-		}
-
-		core-scroll-header-panel::shadow #headerBg {
-			background-color: green;
-		}
-
-		core-scroll-header-panel::shadow #condensedHeaderBg {
-			background-color: blue;
-		}
-
-		#main-title {
-			background-color: transparent;
-		}
-
 	</style>
 
 	<script type="text/javascript">
@@ -60,8 +27,7 @@
 <body fullbleed layout vertical>
 
 	<more-routing-config driver="hash"></more-routing-config>
-	<more-route name="greeting" path="/greeting"></more-route>
-	<more-route name="list" path="/list"></more-route>
+	<more-route name="qr" path="/qr"></more-route>
 	<more-route name="menu" path="/menu">
 		<more-route name="menu-info" path="/:id"></more-route>
 		<more-route name="menu-add" path="/new"></more-route>
@@ -70,15 +36,12 @@
 	<template is="auto-binding" id="app">
 		<core-drawer-panel id="drawer">
 
-			<core-header-panel drawer style="background-color: gray">
+			<core-header-panel drawer>
 				<core-toolbar>Ze Menu</core-toolbar>
 				<more-route-selector>
 					<core-menu>
-						<core-item label="Greeting" route="greeting">
-							<a href="{{ urlFor('greeting') }}"></a>
-						</core-item>
-						<core-item label="List" route="list">
-							<a href="{{ urlFor('list') }}"></a>
+						<core-item label="Qr" route="qr" >
+							<a href="{{ urlFor('qr') }}"></a>
 						</core-item>
 						<core-item label="Menu" route="menu">
 							<a href="{{ urlFor('menu') }}"></a>
@@ -88,18 +51,15 @@
 			</core-header-panel>
 
 
-			<core-scroll-header-panel headerHeight="500" condensedHeaderHeight="150" main condenses tall>
-				<core-toolbar id="main-title" class="tall" layout horizontal end>
-					<core-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></core-icon-button>
+			<core-header-panel main>
+				<core-toolbar id="main-title" layout horizontal end>
+					<paper-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></paper-icon-button>
 					<h1>Ze Title</h1>
 				</core-toolbar>
 				<more-route-selector selectedParams="{{ params }}">
 					<core-pages>
-						<section route="greeting">
-							<yo-greeting></yo-greeting>
-						</section>
-						<section route="list">
-							<yo-list></yo-list>
+						<section route="qr">
+							<cabbage-qr></cabbage-qr>
 						</section>
 						<section route="menu">
 							<cabbage-menu></cabbage-menu>
@@ -112,7 +72,7 @@
 						</section>
 					</core-pages>
 				</more-route-selector>
-			</core-scroll-header-panel>
+			</core-header-panel>
 
 		</core-drawer-panel>
 	</template>
