@@ -39,7 +39,6 @@ module.exports = function(app)  {
 
 	app.route("/api/menu").post(function (req, resp) {
 		// var bodyJson = JSON.parse(JSON.stringify(req.body));
-		console.log("body =>" + JSON.stringify(req.body));
 		if(cabbageValidator.Menu.validateInsert(req.body) === true) {
 			new dbModels.Menu().save(req.body).then(function (result) {
 				var id = result.get("id")
@@ -56,9 +55,10 @@ module.exports = function(app)  {
 		}
 	});
 
-	app.route("/api/menu").put(function (req, resp) {
+	app.route("/api/menu/:id").put(function (req, resp) {
+
 		if(cabbageValidator.Menu.validateUpdate(req.body) === true) {
-			new dbModels.Menu({id: req.body.id}).save(req.body, {patch: true}).then(function (result) {
+			new dbModels.Menu({id: req.params.id}).save(req.body, {patch: true}).then(function (result) {
 				if(result) {
 					resp.sendStatus(200);
 				}

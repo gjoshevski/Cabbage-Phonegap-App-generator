@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="barcodescanner.js"></script>
+	
 	<script type="text/javascript" src="js/qr.js"></script>
 
 	<style type="text/css">
@@ -31,6 +32,7 @@
 	<more-route name="menu" path="/menu">
 		<more-route name="menu-info" path="/:id"></more-route>
 		<more-route name="menu-add" path="/new"></more-route>
+		<more-route name="menu-edit" path="/edit/:id"></more-route>
 	</more-route>
 
 	<template is="auto-binding" id="app">
@@ -69,6 +71,9 @@
 						</section>
 						<section route="menu-add">
 							<cabbage-menu-item-add></cabbage-menu-item-add>
+						</section>
+						<section route="menu-edit">
+							<cabbage-menu-item-edit menuId="{{ params.id }}"></cabbage-menu-item-edit>
 						</section>
 					</core-pages>
 				</more-route-selector>
