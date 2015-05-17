@@ -10,7 +10,7 @@
 				<h3>Email: <span class="val">abc@abc.abc</span></h3> 
 				<h3>Number: <span class="val">123123123</span></h3> 
 			</div>
-			<paper-fab icon="" on-click=""></paper-fab>
+			<paper-fab icon="" on-click="{{ test }}"></paper-fab>
 		</div>
 		<style>
 			:host {
@@ -54,6 +54,14 @@
 			Polymer({
 				ready: function() {
 				},
+				test: function() {
+					var now = new Date().getTime();
+					cordova.plugins.notification.local.schedule({
+						id: 101,
+						text: 'My first notification',
+						at: now
+					});
+				}
 			});
 		})();
 	</script>
