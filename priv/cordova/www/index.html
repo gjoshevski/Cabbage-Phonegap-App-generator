@@ -29,6 +29,7 @@
 
 	<more-routing-config driver="hash"></more-routing-config>
 	<more-route name="qr" path="/qr"></more-route>
+	<more-route name="b-card" path="/b-card"></more-route>
 	<more-route name="menu" path="/menu">
 		<more-route name="menu-info" path="/:id"></more-route>
 		<more-route name="menu-add" path="/new"></more-route>
@@ -44,6 +45,9 @@
 					<core-menu>
 						<core-item label="Qr" route="qr" >
 							<a href="{{ urlFor('qr') }}"></a>
+						</core-item>
+						<core-item label="B Card" route="b-card" >
+							<a href="{{ urlFor('b-card') }}"></a>
 						</core-item>
 						<core-item label="Menu" route="menu">
 							<a href="{{ urlFor('menu') }}"></a>
@@ -62,6 +66,9 @@
 					<core-pages>
 						<section route="qr">
 							<cabbage-qr></cabbage-qr>
+						</section>
+						<section route="b-card">
+							<cabbage-bcard></cabbage-bcard>
 						</section>
 						<section route="menu">
 							<cabbage-menu></cabbage-menu>

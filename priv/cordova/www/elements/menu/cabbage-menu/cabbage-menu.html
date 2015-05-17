@@ -24,6 +24,7 @@
 				<paper-fab icon="add" on-click="{{ onAddButtonClick }}"></paper-fab>
 			</div>
 		</div>
+
 		<style>
 			:host {
 				display: block;
@@ -56,6 +57,9 @@
 				ready: function() {
 					this.menu = [];
 					this.addEventListener('cbg-menu-item-click', this.onMenuItemClicked);
+				},
+				attributeChanged: function(attrName, oldVal, newVal) {
+					console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
 				},
 				onMenuItemClicked: function(event) {
 					MoreRouting.navigateTo('menu-info', {id: event.detail.id});

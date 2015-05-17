@@ -44,8 +44,8 @@
 					console.log(data);
 					MoreRouting.navigateTo('menu');
 				},
-				onMenuItemSaveError: function() {
-					console.log('!2');
+				onMenuItemSaveError: function(error) {
+					console.log(error);
 				}
 			});
 		})();
