@@ -72,8 +72,12 @@ exports.delete = function(req, res) {
 /**
  * List of Qrpoints
  */
-exports.list = function(req, res) { 
-	Qrpoint.find().sort('-created').populate('user', 'displayName').exec(function(err, qrpoints) {
+exports.list = function(req, res) {
+	
+	var appId = req.params.appId;
+	var userImei = req.params.userImei;
+	 
+	Qrpoint.find({ 'appId': appId, 'userImei': userImei }).sort('-created').populate('user', 'displayName').exec(function(err, qrpoints) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
