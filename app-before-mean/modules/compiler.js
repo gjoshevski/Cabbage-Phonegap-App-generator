@@ -55,8 +55,6 @@ function _compile(config, resp) {
 		resp.status(500);
 		resp.send('Fuk!1');
 	}
-
-
 }
 
 function render(config) {
@@ -65,6 +63,24 @@ function render(config) {
 		var tmpl = hbs.compile(fileData);
 		var source = tmpl(config);
 		wait.for(fs.writeFile, util.serverRootPath()+outputDir+'/index.html', source);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function renderConfig() {
+	var config = [
+		{key: 'aaa', value: '111'},
+		{key: 'bbb', value: '2222'}
+	];
+	var fileData = wait.for(fs.readFile, util.serverRootPath()+'/views/conf_tmpl.hbs', 'utf8');
+	if(fileData !== false) {
+		var tmpl = hbs.compile(fileData);
+		var source = tmpl({config: config});
+		wait.for(fs.writeFile, '/Users/viktorot/SchoolProjects/cabbage-core/priv/cordova/www/config.js', source);
+		// wait.for(fs.writeFile, util.serverRootPath()+outputDir+'/config.js', source);
 		return true;
 	}
 	else {
@@ -102,3 +118,4 @@ function returnApk(appName, resp) {
 
 module.exports.render = render;
 module.exports.compile = compile;
+module.exports.renderConfig = renderConfig;

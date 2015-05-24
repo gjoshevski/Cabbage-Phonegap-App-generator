@@ -4,7 +4,7 @@ var validator = require('validator');
 
 
 module.exports = function(app)  {
-	app.route("/api/menu").get(function (req, resp) {
+	app.route('/api/menu').get(function (req, resp) {
 		var itemId = req.query.id;
 		if(itemId) {
 			if(cabbageValidator.Menu.validateGet(req.query) === true) {
@@ -38,10 +38,12 @@ module.exports = function(app)  {
 	});
 
 	app.route("/api/menu").post(function (req, resp) {
-		console.log(req.body);
+		// var bodyJson = JSON.parse(JSON.stringify(req.body));
 		if(cabbageValidator.Menu.validateInsert(req.body) === true) {
 			new dbModels.Menu().save(req.body).then(function (result) {
-				resp.send("K.O.");
+				var id = result.get("id")
+				resp.json({id: id});
+				// resp.sendStatus(200);
 			})
 			.catch(function(error) {
 				console.log(error);
@@ -53,9 +55,10 @@ module.exports = function(app)  {
 		}
 	});
 
-	app.route("/api/menu").put(function (req, resp) {
+	app.route("/api/menu/:id").put(function (req, resp) {
+
 		if(cabbageValidator.Menu.validateUpdate(req.body) === true) {
-			new dbModels.Menu({id: req.body.id}).save(req.body, {patch: true}).then(function (result) {
+			new dbModels.Menu({id: req.params.id}).save(req.body, {patch: true}).then(function (result) {
 				if(result) {
 					resp.sendStatus(200);
 				}

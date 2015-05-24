@@ -7,3 +7,5 @@ public/lib
 app/tests/coverage/
 .bower-*/
 .idea/
+priv/cordova/www/bower_components/*
+priv/cordova/plugins/*

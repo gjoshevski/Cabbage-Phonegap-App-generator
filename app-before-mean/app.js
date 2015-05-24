@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var hbs  = require('hbs');
 var config = require('./util/config');
 var fs = require('fs');
+var cors = require('cors');
 var knex = require('knex')(require('./knexfile').development);
 var bookshelf = require('bookshelf')(knex);
 
@@ -33,6 +34,8 @@ var env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
 
+app.use(cors());
+
 // app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -43,9 +46,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Globbing routing files
-		config.getGlobbedFiles('./routes/*.js').forEach(function(routePath) {
-				require(path.resolve(routePath))(app);
-		});
+config.getGlobbedFiles('./routes/*.js').forEach(function(routePath) {
+		require(path.resolve(routePath))(app);
+});
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -79,5 +82,3 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
-
-

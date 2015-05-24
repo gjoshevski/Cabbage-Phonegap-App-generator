@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="import" href="elements.html">
+
+	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="barcodescanner.js"></script>
+	
+	<script type="text/javascript" src="js/qr.js"></script>
+
+	<style type="text/css">
+		core-drawer-panel:not([narrow]) #navicon {
+			display: none;
+		}
+	</style>
+
+	<script type="text/javascript">
+		document.addEventListener('polymer-ready', function() {
+		});
+	</script>
+</head>
+
+<body fullbleed layout vertical>
+
+	<more-routing-config driver="hash"></more-routing-config>
+	<more-route name="qr" path="/qr"></more-route>
+	<more-route name="b-card" path="/b-card"></more-route>
+	<more-route name="menu" path="/menu">
+		<more-route name="menu-info" path="/:id"></more-route>
+		<more-route name="menu-add" path="/new"></more-route>
+		<more-route name="menu-edit" path="/edit/:id"></more-route>
+	</more-route>
+
+	<template is="auto-binding" id="app">
+		<core-drawer-panel id="drawer">
+
+			<core-header-panel drawer>
+				<core-toolbar>Ze Menu</core-toolbar>
+				<more-route-selector>
+					<core-menu>
+						<core-item label="Qr" route="qr" >
+							<a href="{{ urlFor('qr') }}"></a>
+						</core-item>
+						<core-item label="B Card" route="b-card" >
+							<a href="{{ urlFor('b-card') }}"></a>
+						</core-item>
+						<core-item label="Menu" route="menu">
+							<a href="{{ urlFor('menu') }}"></a>
+						</core-item>
+					</core-menu>
+				</more-route-selector>
+			</core-header-panel>
+
+
+			<core-header-panel main>
+				<core-toolbar id="main-title" layout horizontal end>
+					<paper-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></paper-icon-button>
+					<h1>Ze Title</h1>
+				</core-toolbar>
+				<more-route-selector selectedParams="{{ params }}">
+					<core-pages>
+						<section route="qr">
+							<cabbage-qr></cabbage-qr>
+						</section>
+						<section route="b-card">
+							<cabbage-bcard></cabbage-bcard>
+						</section>
+						<section route="menu">
+							<cabbage-menu></cabbage-menu>
+						</section>
+						<section route="menu-info">
+							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
+						</section>
+						<section route="menu-add">
+							<cabbage-menu-item-add></cabbage-menu-item-add>
+						</section>
+						<section route="menu-edit">
+							<cabbage-menu-item-edit menuId="{{ params.id }}"></cabbage-menu-item-edit>
+						</section>
+					</core-pages>
+				</more-route-selector>
+			</core-header-panel>
+
+		</core-drawer-panel>
+	</template>
+
+
+
+</body>
+</html>

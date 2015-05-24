@@ -16,4 +16,9 @@ module.exports = function(app) {
 			//resp.send('Ok.');
 		}
 	});
+
+	app.route('/config').get(function(req, resp) {
+		wait.launchFiber(compiler.renderConfig);
+		resp.send("Kokal");
+	});
 };

@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-qr" attributes="">
+	<template>
+		<div id="wrapper">
+			<h3>Scan that code, bitch</h3>
+			<h3>Code: {{ code }}</h3>
+			<paper-fab icon="input" on-click="{{ onScanQrClick }}"></paper-fab>
+		</div>
+		<style>
+			:host {
+				display: block;
+			}
+			#wrapper {
+				background-color: #eee;
+				margin: 50px auto 0 auto;
+				width: 70%;
+				font-size: 18px;
+				font-weight: 200;
+				line-height: 30px;
+				background-color: #eee;
+				border-radius: 6px;
+				padding: 60px;
+				position: relative;
+			}
+			paper-fab {
+				background-color: #2A457A;
+				position: absolute;
+				bottom: 0px; right: 0px;
+				margin-bottom: 10px;
+				margin-right: 10px;
+			}
+		</style>
+	</template>
+	<script>
+		(function () {
+			Polymer({
+				code: '',
+				ready: function() {
+					this.code = '[nothing]';
+					CabbageQr.init();
+				},
+				onScanQrClick: function() {
+					var self = this;
+
+					var success = function(resultObj) {
+						self.code = resultObj.text;
+					};
+					var error = function(result) { 
+						console.log(result);
+					};
+
+					CabbageQr.scan(success, error);
+				}
+			});
+		})();
+	</script>
+</polymer-element>
