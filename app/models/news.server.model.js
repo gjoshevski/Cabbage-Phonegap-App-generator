@@ -10,19 +10,30 @@ var mongoose = require('mongoose'),
  * News Schema
  */
 var NewsSchema = new Schema({
-	name: {
+	title: {
 		type: String,
 		default: '',
-		required: 'Please fill News name',
+		required: 'Please fill News title',
+		trim: true
+	},
+	additionalInfo: {
+		type: String,
+		default: '',		
+		trim: true
+	},
+	imageUrl: {
+		type: String,
+		default: '',		
+		trim: true
+	},
+	newsUrl: {
+		type: String,
+		default: '',		
 		trim: true
 	},
 	created: {
 		type: Date,
 		default: Date.now
-	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
 	}
 });
 

@@ -10,19 +10,26 @@ var mongoose = require('mongoose'),
  * Qrpoint Schema
  */
 var QrpointSchema = new Schema({
-	name: {
+	appId: {
 		type: String,
 		default: '',
-		required: 'Please fill Qrpoint name',
+		required: 'Please fill AppId',
 		trim: true
 	},
-	created: {
-		type: Date,
-		default: Date.now
+	userImei: {
+		type: String,
+		default: '',
+		required: 'Please fill user Imei',
+		trim: true
 	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
+	additionalInfo: {
+		type: String,
+		default: '',		
+		trim: true
+	},
+	points: {
+		type: Number,
+		default: 0		
 	}
 });
 

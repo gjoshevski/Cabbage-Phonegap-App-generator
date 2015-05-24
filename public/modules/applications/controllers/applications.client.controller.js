@@ -5,12 +5,38 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 	function($scope, $stateParams, $location, Authentication, Applications, Config) {
 		$scope.authentication = Authentication;
         $scope.config = Config;
+		$scope.app = [];
+
+		
+        $scope.toggleSelection = function toggleSelection(fruitName) {
+            if (!$scope.app.modules) {
+                $scope.app.modules = [];
+            }
+
+            var idx = $scope.app.modules.indexOf(fruitName);
+
+            // is currently selected
+            if (idx > -1) {
+                $scope.app.modules.splice(idx, 1);
+            }
+
+            // is newly selected
+            else {
+                $scope.app.modules.push(fruitName);
+            }            
+            console.log($scope.app);
+        };
+		
 
 		// Create new Application
 		$scope.create = function() {
+			
+			localStorage.setItem("appUnderConstruction", $scope.application);
+
+			
 			// Create new Application object
 			var application = new Applications ({
-				name: this.name
+				name: this.application.name,				
 			});
 
 			// Redirect after save

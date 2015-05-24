@@ -16,7 +16,11 @@ var ApplicationSchema = new Schema({
 		required: 'Please fill Application name',
 		trim: true
 	},
-	created: {
+	modules: {
+		type: Array,
+		default: []
+	},
+	created: { 
 		type: Date,
 		default: Date.now
 	},

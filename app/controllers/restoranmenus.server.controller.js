@@ -73,7 +73,9 @@ exports.delete = function(req, res) {
  * List of Restoranmenus
  */
 exports.list = function(req, res) { 
-	Restoranmenu.find().sort('-created').populate('user', 'displayName').exec(function(err, restoranmenus) {
+	var appId = req.params.appId;	
+
+	Restoranmenu.find({ 'appId': appId }).sort('-created').populate('user', 'displayName').exec(function(err, restoranmenus) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
