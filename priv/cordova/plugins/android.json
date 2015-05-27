@@ -19,6 +19,10 @@
                         {
                             "xml": "<feature name=\"LocalNotification\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.localnotification.LocalNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"imeiplugin\"><param name=\"android-package\" value=\"com.joandilee.imeiplugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -86,6 +90,10 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
                             "count": 1
                         }
                     ]
@@ -580,6 +588,9 @@
             "PACKAGE_NAME": "io.cabbage.app"
         },
         "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "io.cabbage.app"
+        },
+        "com.joandilee.imeiplugin": {
             "PACKAGE_NAME": "io.cabbage.app"
         }
     },

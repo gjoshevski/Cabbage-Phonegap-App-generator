@@ -65,6 +65,9 @@
 					this.description = '';
 					this.image = '';
 				},
+				refresh: function() {
+					this.$.getRepos.go();
+				},
 				menuIdChanged: function(oldVal, newVal) {
 					// console.log("menuId changed => " + newVal);
 					this.getMenuInfo();

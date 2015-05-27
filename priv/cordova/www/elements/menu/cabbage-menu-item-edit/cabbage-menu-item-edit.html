@@ -69,6 +69,9 @@
 						'price': this.$.price.value
 					};
 				},
+				refresh: function(){
+					console.log('refresh');
+				},
 				menuIdChanged: function() {
 					this.getMenuInfo();
 				},
@@ -80,6 +83,7 @@
 					this.$.updateMenu.go();
 				},
 				onMenuItemUpdateResponse: function() {
+					MoreRouting.navigateTo('menu-info', {id: this.menuId});					
 				},
 				onMenuItemUpdateError: function() {
 				},
@@ -91,7 +95,6 @@
 					this.$.price.value = menuData.price;
 				},
 				onMenuInfoError: function(error) {
-					console.log(error);
 				}
 
 			});

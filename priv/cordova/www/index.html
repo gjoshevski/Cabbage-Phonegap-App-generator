@@ -21,6 +21,20 @@
 
 	<script type="text/javascript">
 		document.addEventListener('polymer-ready', function() {
+			window.addEventListener('hashchange', function() {
+				if(window.location.hash.indexOf('/menu/edit') !== -1) {
+					// edit item
+				}
+				else if(window.location.hash.indexOf('/menu/new') !== -1) {
+					// add item	
+				}
+				else if(window.location.hash.indexOf('/menu/') !== -1) {
+					document.querySelector('cabbage-menu-view').refresh();
+				}
+				else if(window.location.hash.indexOf('/menu') !== -1) {
+					document.querySelector('cabbage-menu').marko();
+				}
+			});
 		});
 	</script>
 </head>

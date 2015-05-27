@@ -3,7 +3,7 @@
 <polymer-element name="cabbage-menu" attributes="menu">
 	<template>
 
-		<core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage>
+		<!-- <core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage> -->
 
 		<core-ajax  id="getMenu"
 					auto
@@ -58,8 +58,8 @@
 					this.menu = [];
 					this.addEventListener('cbg-menu-item-click', this.onMenuItemClicked);
 				},
-				attributeChanged: function(attrName, oldVal, newVal) {
-					console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+				marko: function() {
+					this.$.getMenu.go();
 				},
 				onMenuItemClicked: function(event) {
 					MoreRouting.navigateTo('menu-info', {id: event.detail.id});
