@@ -5,6 +5,7 @@
 var init = require('./config/init')(),
 	config = require('./config/config'),
 	mongoose = require('mongoose'),
+	cors = require('cors'),
 	chalk = require('chalk');
 
 /**
@@ -28,6 +29,8 @@ require('./config/passport')();
 
 // Start the app by listening on <port>
 app.listen(config.port);
+
+app.use(cors());
 
 // Expose app
 exports = module.exports = app;

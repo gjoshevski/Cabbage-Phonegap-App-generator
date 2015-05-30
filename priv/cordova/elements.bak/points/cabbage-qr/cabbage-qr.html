@@ -1,9 +1,10 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 
 <polymer-element name="cabbage-qr" attributes="">
 	<template>
 		<div id="wrapper">
-			<h3>Scan that code, bitch</h3>
+			<h3>Phone ID => {{ phoneId }}</h3>
+			<h3>You currently have {{ points }} points.</h3>
 			<h3>Code: {{ code }}</h3>
 			<paper-fab icon="input" on-click="{{ onScanQrClick }}"></paper-fab>
 		</div>
@@ -13,8 +14,8 @@
 			}
 			#wrapper {
 				background-color: #eee;
-				margin: 50px auto 0 auto;
-				width: 70%;
+				margin: 50px auto 0px auto;
+				width: 50%;
 				font-size: 18px;
 				font-weight: 200;
 				line-height: 30px;
@@ -37,8 +38,16 @@
 			Polymer({
 				code: '',
 				ready: function() {
+					this.points = -4;
 					this.code = '[nothing]';
+					this.phoneId = '[empty]';
 					CabbageQr.init();
+				},
+				getPhoneId: function() {
+					var self = this;
+					window.plugins.imeiplugin.getImei(function(imei) {
+						self.phoneId = imei;
+					});
 				},
 				onScanQrClick: function() {
 					var self = this;
@@ -50,7 +59,9 @@
 						console.log(result);
 					};
 
-					CabbageQr.scan(success, error);
+					this.getPhoneId();
+
+					//CabbageQr.scan(success, error);
 				}
 			});
 		})();

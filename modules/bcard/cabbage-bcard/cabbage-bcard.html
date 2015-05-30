@@ -1,0 +1,68 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-bcard" attributes="">
+	<template>
+		<div id="wrapper" horizontal layout center>
+			<core-image preload fade fullbleed sizing="cover" src=""></core-image>
+			<div id="info">
+				<h3>Name: <span class="val">Viktor</span></h3> 
+				<h3>Address: <span class="val">Dom4e</span></h3> 
+				<h3>Email: <span class="val">abc@abc.abc</span></h3> 
+				<h3>Number: <span class="val">123123123</span></h3> 
+			</div>
+			<paper-fab icon="" on-click="{{ test }}"></paper-fab>
+		</div>
+		<style>
+			:host {
+				display: block;
+			}
+			#wrapper {
+				background-color: #eee;
+				margin: 50px auto 0px auto;
+				width: 50%;
+				font-size: 18px;
+				font-weight: 200;
+				line-height: 30px;
+				background-color: #eee;
+				border-radius: 6px;
+				padding: 30px;
+				position: relative;
+			}
+			#info {
+				margin-left: 50px;
+			}
+			paper-fab {
+				background-color: #2A457A;
+				position: absolute;
+				bottom: 0px; right: 0px;
+				margin-bottom: 10px;
+				margin-right: 10px;
+			}
+			core-image {
+				background-color: red;
+				width: 300px;
+				height: 200px;
+			}
+			span.val {
+				font-weight: normal;
+				font-size: 18px;
+			}
+		</style>
+	</template>
+	<script>
+		(function () {
+			Polymer({
+				ready: function() {
+				},
+				test: function() {
+					var now = new Date().getTime();
+					cordova.plugins.notification.local.schedule({
+						id: 101,
+						text: 'My first notification',
+						at: now
+					});
+				}
+			});
+		})();
+	</script>
+</polymer-element>

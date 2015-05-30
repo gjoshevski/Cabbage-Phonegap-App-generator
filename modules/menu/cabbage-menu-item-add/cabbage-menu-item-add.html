@@ -4,23 +4,45 @@
 	<template>
 
 		<core-ajax  id="addMenu"
-					url="http://192.168.0.16:3000/api/menu"
+					url="http://127.0.0.1:3000/api/menu"
 					method="POST"
 					handleAs="json"
 					contentType="application/json"
 					on-core-response="{{ onMenuItemSaveResponse }}"
 					on-core-error="{{ onMenuItemSavError }}"></core-ajax>
 
-		<paper-input id="name" label="Name"></paper-input>
-		<paper-input id="price" label="Price"></paper-input>
-		<paper-input id="image" label="Image URL"></paper-input>
-		<paper-input id="description" label="Description"></paper-input>
+		<div id="wrapper">
+			<paper-input id="name" label="Name"></paper-input>
+			<paper-input id="price" label="Price"></paper-input>
+			<paper-input id="image" label="Image URL"></paper-input>
+			<paper-input id="description" label="Description"></paper-input>
 
-		<div horizontal end-justified layout>
-			<paper-fab icon="save" on-click="{{ onSaveButtonClick }}" style="background-color: green;"></paper-fab>
+			<div horizontal end-justified layout>
+				<paper-fab icon="done" on-click="{{ onSaveButtonClick }}" style="background-color: green;"></paper-fab>
+			</div>
 		</div>
 
 		<style>
+			#wrapper {
+				background-color: #eee;
+				margin: 50px auto 20px auto;
+				width: 70%;
+				font-size: 18px;
+				font-weight: 200;
+				line-height: 30px;
+				background-color: #eee;
+				border-radius: 6px;
+				padding: 30px;
+				padding-bottom: 80px;
+				position: relative;
+			}
+			paper-fab {
+				background-color: green;
+				position: absolute;
+				bottom: 0px; right: 0px;
+				margin-bottom: 10px;
+				margin-right: 10px;
+			}
 			paper-input   { display: block; }
 		</style>
 	</template>
@@ -44,8 +66,8 @@
 					console.log(data);
 					MoreRouting.navigateTo('menu');
 				},
-				onMenuItemSaveError: function(error) {
-					console.log(error);
+				onMenuItemSaveError: function() {
+					console.log('!2');
 				}
 			});
 		})();

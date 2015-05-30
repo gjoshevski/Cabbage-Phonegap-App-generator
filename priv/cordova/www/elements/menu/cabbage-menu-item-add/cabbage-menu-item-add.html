@@ -4,10 +4,10 @@
 	<template>
 
 		<core-ajax  id="addMenu"
-					url="http://127.0.0.1:3000/api/menu"
+					url="http://127.0.0.1:3000/restoranmenus"
 					method="POST"
 					handleAs="json"
-					contentType="application/json"
+					contentType="application/x-www-form-urlencoded"
 					on-core-response="{{ onMenuItemSaveResponse }}"
 					on-core-error="{{ onMenuItemSavError }}"></core-ajax>
 
@@ -50,24 +50,27 @@
 	<script>
 		(function() {
 			Polymer({
+				ready: function() {
+					this.appId = CabbageConf.applicationId;
+				},
 				getData: function() {
 					return {
-						'name': this.$.name.value,
-						'description': this.$.description.value,
-						'image': this.$.image.value,
-						'price': this.$.price.value
+						'appId': this.appId,
+						'nameOfItem': this.$.name.value,
+						'descriptionOfItem': this.$.description.value,
+						'imageUrl': this.$.image.value,
+						'priceInEuroCents': this.$.price.value
 					};
 				},
 				onSaveButtonClick: function() {
-					this.$.addMenu.body = JSON.stringify(this.getData());
+					this.$.addMenu.params = this.getData();
 					this.$.addMenu.go();
 				},
 				onMenuItemSaveResponse: function(data) {
-					console.log(data);
 					MoreRouting.navigateTo('menu');
 				},
 				onMenuItemSaveError: function() {
-					console.log('!2');
+					console.error('cabbage-menu-add | error saving item');
 				}
 			});
 		})();

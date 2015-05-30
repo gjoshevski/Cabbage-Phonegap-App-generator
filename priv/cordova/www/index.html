@@ -4,13 +4,15 @@
 	<title></title>
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 	<meta content="utf-8" http-equiv="encoding">
+
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="import" href="elements.html">
 
 	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
-	<script type="text/javascript" src="cordova.js"></script>
-	<script type="text/javascript" src="barcodescanner.js"></script>
-	
+	<!-- <script type="text/javascript" src="cordova.js"></script> -->
+	<!-- <script type="text/javascript" src="barcodescanner.js"></script> -->
+
+	<script type="text/javascript" src="config.js"></script>	
 	<script type="text/javascript" src="js/qr.js"></script>
 
 	<style type="text/css">
@@ -32,7 +34,7 @@
 					document.querySelector('cabbage-menu-view').refresh();
 				}
 				else if(window.location.hash.indexOf('/menu') !== -1) {
-					document.querySelector('cabbage-menu').marko();
+					document.querySelector('cabbage-menu').refresh();
 				}
 			});
 		});

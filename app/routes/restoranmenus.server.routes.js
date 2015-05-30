@@ -6,16 +6,18 @@ module.exports = function(app) {
 
 	// Restoranmenus Routes
 	app.route('/restoranmenus')
-	//	.get(restoranmenus.list)
+		.options(restoranmenus.options)
 		.post(restoranmenus.create);
 		
 	// Restoranmenus Routes
 	app.route('/restoranmenus/byApp/:appId')
+		.options(restoranmenus.options)
 		.get(restoranmenus.list);
 		
 
 
 	app.route('/restoranmenus/:restoranmenuId')
+		.options(restoranmenus.options)
 		.get(restoranmenus.read)
 		.put(restoranmenus.update)
 		.delete(restoranmenus.delete);
