@@ -49,6 +49,8 @@
 		
 		<more-route name="b-card" path="/b-card">
 			
+			<more-route name="b-card-edit" path="/edit"></more-route>
+			
 		</more-route>
 		
 
@@ -57,6 +59,9 @@
 		
 		<more-route name="menu" path="/menu">
 			<more-route name="menu-info" path="/:id"></more-route>
+			
+			<more-route name="menu-add" path="/new"></more-route>
+			<more-route name="menu-edit" path="/edit/:id"></more-route>
 			
 		</more-route>
 		
@@ -106,6 +111,10 @@
 							<cabbage-bcard></cabbage-bcard>
 						</section>
 						
+						<section route="b-card-edit">
+							<cabbage-bcard-edit></cabbage-bcard-edit>
+						</section>
+						
 						
 
 						
@@ -116,6 +125,13 @@
 						</section>
 						<section route="menu-info">
 							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
+						</section>
+						
+						<section route="menu-add">
+							<cabbage-menu-item-add></cabbage-menu-item-add>
+						</section>
+						<section route="menu-edit">
+							<cabbage-menu-item-edit menuId="{{ params.id }}"></cabbage-menu-item-edit>
 						</section>
 						
 						

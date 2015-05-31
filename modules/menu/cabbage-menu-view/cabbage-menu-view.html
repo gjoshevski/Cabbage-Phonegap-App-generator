@@ -5,13 +5,18 @@
 
 		<core-localstorage id="storage" name="cabbage-localstorage-menu"></core-localstorage>
 
-		<core-ajax  id="getRepos"
-					url="http://127.0.0.1:3000/api/menu"
+		<core-ajax  id="getItem"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					menthod="GET",
 					handleAs="json"
-					params="{{ {id: menuId} }}"
 					on-core-response="{{ onMenuInfoReceived }}"
 					on-core-error="{{ onMenuInfoError }}"></core-ajax>
+
+		<core-ajax  id="deleteMenu"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
+					method="DELETE"
+					on-core-response="{{ onMenuItemDeleteResponse }}"
+					on-core-error="{{ onMenuItemDeleteError }}"></core-ajax>
 
 		<div id="wrapper">
 			<core-image id="image" preload fade fullbleed sizing="cover" src="{{ image }}"></core-image>
@@ -20,7 +25,10 @@
 			<h3>Description:</h3>
 			<p>{{ description }}</p>
 
-			<paper-fab icon="create" on-click="{{ onEditButtonClick }}"></paper-fab>
+			<div id="fab-wrapper" horizontal end-justified layout hidden?="{{ !isAdmin }}">
+				<paper-fab icon="clear" on-click="{{ onDeleteButtonClick }}" style="background-color: #D32F2F;"></paper-fab>
+				<paper-fab icon="create" on-click="{{ onEditButtonClick }}" style="background-color: #4CAF50;"></paper-fab>
+			</div>
 		</div>
 
 		<style>
@@ -42,16 +50,18 @@
 				padding-bottom: 60px;
 				position: relative;
 			}
+			#fab-wrapper {
+				position: absolute;
+				bottom: 0px; right: 0px;
+				margin-bottom: 10px;
+				margin-right: 10px;
+			}
 			#image {
 				background-color: gray;
 				width: 100%;
 				height: 200px;
 			}
 			paper-fab {
-				background-color: green;
-				position: absolute;
-				bottom: 0px; right: 0px;
-				margin-bottom: 10px;
 				margin-right: 10px;
 			}
 		</style>
@@ -64,19 +74,29 @@
 					this.price = '';
 					this.description = '';
 					this.image = '';
+					this.endpoint = CabbageConf.endpoint;
+					this.isAdmin = CabbageConf.isAdmin;
 				},
 				refresh: function() {
-					this.$.getRepos.go();
+					if(this.menuId !== undefined || this.menuId !== '') {
+						this.$.getItem.go();
+					}
 				},
 				menuIdChanged: function(oldVal, newVal) {
 					// console.log("menuId changed => " + newVal);
 					this.getMenuInfo();
 				},
 				getMenuInfo: function() {
-					this.$.getRepos.go();
+					this.$.getItem.go();
 				},
 				onMenuInfoReceived: function(data) {
 					this.displayInfo(data.detail.response);
+				},
+				onMenuItemDeleteResponse: function() {
+					MoreRouting.navigateTo('menu');	
+				},
+				onMenuItemDeleteError: function() {
+					console.error('cabbage-menu-edit | delete error');
 				},
 				onMenuInfoError: function() {
 					var storageData = this.$.storage.value;
@@ -93,13 +113,16 @@
 					}
 				},
 				displayInfo: function(menuInfo) {
-					this.image = menuInfo.image;
-					this.name = menuInfo.name;
-					this.price = menuInfo.price;
-					this.description = menuInfo.description;
+					this.image = menuInfo.imageUrl;
+					this.name = menuInfo.nameOfItem;
+					this.price = menuInfo.priceInEuroCents;
+					this.description = menuInfo.descriptionOfItem;
 				},
 				onEditButtonClick: function() {
 					MoreRouting.navigateTo('menu-edit', {id: this.menuId});
+				},
+				onDeleteButtonClick: function() {
+					this.$.deleteMenu.go();
 				}
 			});
 		})();

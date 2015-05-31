@@ -2,15 +2,24 @@
 
 <polymer-element name="cabbage-bcard" attributes="">
 	<template>
-		<div id="wrapper" horizontal layout center>
+
+		<core-ajax  id="getBCard"
+					url="http://127.0.0.1:3000/bcard/{{ appId }}"
+					method="GET"
+					handleAs="json"
+					contentType="application/x-www-form-urlencoded"
+					on-core-response="{{ onBCardGetResponse }}"
+					on-core-error="{{ onBCardGetError }}"></core-ajax>
+
+		<div id="wrapper" vertical layout center>
 			<core-image preload fade fullbleed sizing="cover" src=""></core-image>
-			<div id="info">
-				<h3>Name: <span class="val">Viktor</span></h3> 
-				<h3>Address: <span class="val">Dom4e</span></h3> 
-				<h3>Email: <span class="val">abc@abc.abc</span></h3> 
-				<h3>Number: <span class="val">123123123</span></h3> 
+			<div id="info" vertical layout left>
+				<h3>Name: <span class="val">{{ name }}</span></h3> 
+				<h3>Address: <span class="val">{{ address }}</span></h3> 
+				<h3>Email: <span class="val">{{ email }}</span></h3> 
+				<h3>Number: <span class="val">{{ number }}</span></h3> 
 			</div>
-			<paper-fab icon="" on-click="{{ test }}"></paper-fab>
+			<paper-fab icon="create" on-click="{{ onEditButtonClick }}" hidden?="{{ !isAdmin }}" style="background-color: #4CAF50"></paper-fab>
 		</div>
 		<style>
 			:host {
@@ -18,18 +27,19 @@
 			}
 			#wrapper {
 				background-color: #eee;
-				margin: 50px auto 0px auto;
-				width: 50%;
+				margin: 50px auto 20px auto;
+				width: 70%;
 				font-size: 18px;
 				font-weight: 200;
 				line-height: 30px;
 				background-color: #eee;
 				border-radius: 6px;
 				padding: 30px;
+				padding-bottom: 60px;
 				position: relative;
 			}
 			#info {
-				margin-left: 50px;
+				width: 100%;
 			}
 			paper-fab {
 				background-color: #2A457A;
@@ -39,8 +49,8 @@
 				margin-right: 10px;
 			}
 			core-image {
-				background-color: red;
-				width: 300px;
+				background-color: #727272;
+				width: 100%;
 				height: 200px;
 			}
 			span.val {
@@ -53,14 +63,36 @@
 		(function () {
 			Polymer({
 				ready: function() {
+					this.appId = CabbageConf.applicationId;
+					this.isAdmin = CabbageConf.isAdmin;
+					
+					this.name = '1';
+					this.email = '2';
+					this.address = '3';
+					this.number = '4';
+
+					// this.$.getBCard.go();
+				},
+				refresh: function() {
+
+				},
+				onEditButtonClick: function() {
+					MoreRouting.navigateTo('b-card-edit');		
+				},
+				onBCardGetResponse: function(data) {
+					var bCardData = data.detail.response;
+					// update data
+				},
+				onBCardGetError: function() {
+					console.error('bcard | get data error');
 				},
 				test: function() {
-					var now = new Date().getTime();
-					cordova.plugins.notification.local.schedule({
-						id: 101,
-						text: 'My first notification',
-						at: now
-					});
+					// var now = new Date().getTime();
+					// cordova.plugins.notification.local.schedule({
+					// 	id: 101,
+					// 	text: 'My first notification',
+					// 	at: now
+					// });
 				}
 			});
 		})();

@@ -3,31 +3,31 @@
 <polymer-element name="cabbage-menu-item-edit" attributes="menuId">
 	<template>
 
-		<core-ajax  id="getRepos"
-					url="http://127.0.0.1:3000/api/menu"
+		<core-ajax  id="getItem"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					menthod="GET",
 					handleAs="json"
-					params="{{ {id: menuId} }}"
 					on-core-response="{{ onMenuInfoReceived }}"
 					on-core-error="{{ onMenuInfoError }}"></core-ajax>
 
 		<core-ajax  id="updateMenu"
-					url="http://127.0.0.1:3000/api/menu/{{ menuId }}"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					method="PUT"
-					handleAs="text"
-					contentType="application/json"
+					handleAs="json"
+					contentType="application/x-www-form-urlencoded"
 					on-core-response="{{ onMenuItemUpdateResponse }}"
 					on-core-error="{{ onMenuItemUpdateError }}"></core-ajax>
 
 		<div id="wrapper">
+			<core-image preload fade fullbleed sizing="cover" src="{{ newImage }}"></core-image>
+
 			<paper-input id="name" label="Name"></paper-input>
 			<paper-input id="price" label="Price"></paper-input>
-			<paper-input id="image" label="Image URL"></paper-input>
+			<paper-input id="image" value="{{ newImage }}" label="Image URL"></paper-input>
 			<paper-input id="description" label="Description"></paper-input>
 
 			<div id="fab-wrapper" horizontal end-justified layout>
-				<paper-fab icon="clear" on-click="{{ onUpdateButtonClick }}" style="background-color: red;"></paper-fab>
-				<paper-fab icon="done" on-click="{{ onUpdateButtonClick }}" style="background-color: green;"></paper-fab>
+				<paper-fab icon="done" on-click="{{ onUpdateButtonClick }}" style="background-color: #4CAF50;"></paper-fab>
 			</div>
 		</div>
 
@@ -51,52 +51,71 @@
 				margin-bottom: 10px;
 				margin-right: 10px;
 			}
+			core-image {
+				background-color: gray;
+				width: 100%;
+				height: 200px;
+			}
 			paper-fab { 
 				margin-right: 10px;
 			}
-			paper-input   { display: block; }
+			paper-input { 
+				display: block; 
+			}
+			paper-input /deep/ .focused-underline {
+				background-color: #FBC02D;
+			}
 		</style>
 	</template>
 
 	<script>
 		(function() {
 			Polymer({
+				ready: function() {
+					this.newImage = '';
+					this.appId = CabbageConf.applicationId;
+					this.endpoint = CabbageConf.endpoint;
+				},
 				getData: function() {
 					return {
-						'name': this.$.name.value,
-						'description': this.$.description.value,
-						'image': this.$.image.value,
-						'price': this.$.price.value
+						'nameOfItem': this.$.name.value,
+						'descriptionOfItem': this.$.description.value,
+						'imageUrl': this.$.image.value,
+						'priceInEuroCents': this.$.price.value
 					};
-				},
-				refresh: function(){
-					console.log('refresh');
 				},
 				menuIdChanged: function() {
 					this.getMenuInfo();
 				},
 				getMenuInfo: function() {
-					this.$.getRepos.go();
+					if(this.menuId) {
+						this.$.getItem.go();
+					}
 				},
 				onUpdateButtonClick: function() {
-					this.$.updateMenu.body = JSON.stringify(this.getData());
+					this.$.updateMenu.params = this.getData();
 					this.$.updateMenu.go();
+					
 				},
 				onMenuItemUpdateResponse: function() {
-					MoreRouting.navigateTo('menu-info', {id: this.menuId});					
+					MoreRouting.navigateTo('menu-info', {id: this.menuId});		
 				},
 				onMenuItemUpdateError: function() {
+					console.error('cabbage-menu-edit | update error');
 				},
 				onMenuInfoReceived: function(data) {
 					var menuData = data.detail.response;
-					this.$.name.value = menuData.name;
-					this.$.description.value = menuData.description;
-					this.$.image.value = menuData.image;
-					this.$.price.value = menuData.price;
+					this.$.name.value = menuData.nameOfItem;
+					this.$.description.value = menuData.descriptionOfItem;
+					this.$.image.value = menuData.imageUrl;
+					this.$.price.value = menuData.priceInEuroCents;
 				},
 				onMenuInfoError: function(error) {
+					console.error('cabbage-menu-edit | get info error');
+				},
+				onImageUrlChange: function() {
+										
 				}
-
 			});
 		})();
 	</script>
