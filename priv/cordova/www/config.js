@@ -1,3 +1,5 @@
 var CabbageConf = {
-	'applicationId': '123'
+	'endpoint': 'http://192.168.1.102:3000',
+	'applicationId': '123',
+	isAdmin: true
 }

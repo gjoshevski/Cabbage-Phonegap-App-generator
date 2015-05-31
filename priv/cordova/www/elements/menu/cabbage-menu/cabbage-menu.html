@@ -7,7 +7,7 @@
 
 		<core-ajax  id="getMenu"
 					auto
-					url="http://127.0.0.1:3000/restoranmenus/byApp/{{ appId }}"
+					url="{{ endpoint }}/restoranmenus/byApp/{{ appId }}"
 					method="GET"
 					handleAs="json"
 					on-core-response="{{ onMenuDataReceived }}"
@@ -21,7 +21,7 @@
 									image="{{ item.imageUrl }}"></cabbage-menu-item>
 			</template>
 
-			<div horizontal end-justified layout>
+			<div horizontal end-justified layout hidden?="{{ !isAdmin }}">
 				<paper-fab icon="add" on-click="{{ onAddButtonClick }}"></paper-fab>
 			</div>
 		</div>
@@ -44,7 +44,7 @@
 				position: relative;
 			}
 			paper-fab {
-				background-color: green;
+				background-color: #4CAF50;
 				position: absolute;
 				bottom: 0px; right: 0px;
 				margin-bottom: 10px;
@@ -58,6 +58,8 @@
 				ready: function() {
 					this.menu = [];
 					this.appId = CabbageConf.applicationId;
+					this.endpoint = CabbageConf.endpoint;
+					this.isAdmin = CabbageConf.isAdmin;
 					this.addEventListener('cbg-menu-item-click', this.onMenuItemClicked);
 				},
 				refresh: function() {

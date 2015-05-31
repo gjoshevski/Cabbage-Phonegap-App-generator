@@ -45,7 +45,9 @@
 
 	<more-routing-config driver="hash"></more-routing-config>
 	<more-route name="qr" path="/qr"></more-route>
-	<more-route name="b-card" path="/b-card"></more-route>
+	<more-route name="b-card" path="/b-card">
+		<more-route name="b-card-edit" path="/edit"></more-route>
+	</more-route>
 	<more-route name="menu" path="/menu">
 		<more-route name="menu-info" path="/:id"></more-route>
 		<more-route name="menu-add" path="/new"></more-route>
@@ -56,7 +58,7 @@
 		<core-drawer-panel id="drawer">
 
 			<core-header-panel drawer>
-				<core-toolbar>Ze Menu</core-toolbar>
+				<core-toolbar style="background-color: #FBC02D">Ze Menu</core-toolbar>
 				<more-route-selector>
 					<core-menu>
 						<core-item label="Qr" route="qr" >
@@ -85,6 +87,9 @@
 						</section>
 						<section route="b-card">
 							<cabbage-bcard></cabbage-bcard>
+						</section>
+						<section route="b-card-edit">
+							<cabbage-bcard-edit></cabbage-bcard-edit>
 						</section>
 						<section route="menu">
 							<cabbage-menu></cabbage-menu>

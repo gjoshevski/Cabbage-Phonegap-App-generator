@@ -4,14 +4,14 @@
 	<template>
 
 		<core-ajax  id="getItem"
-					url="http://127.0.0.1:3000/restoranmenus/{{ menuId }}"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					menthod="GET",
 					handleAs="json"
 					on-core-response="{{ onMenuInfoReceived }}"
 					on-core-error="{{ onMenuInfoError }}"></core-ajax>
 
 		<core-ajax  id="updateMenu"
-					url="http://127.0.0.1:3000/restoranmenus/{{ menuId }}"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					method="PUT"
 					handleAs="json"
 					contentType="application/x-www-form-urlencoded"
@@ -27,7 +27,7 @@
 			<paper-input id="description" label="Description"></paper-input>
 
 			<div id="fab-wrapper" horizontal end-justified layout>
-				<paper-fab icon="done" on-click="{{ onUpdateButtonClick }}" style="background-color: green;"></paper-fab>
+				<paper-fab icon="done" on-click="{{ onUpdateButtonClick }}" style="background-color: #4CAF50;"></paper-fab>
 			</div>
 		</div>
 
@@ -59,7 +59,12 @@
 			paper-fab { 
 				margin-right: 10px;
 			}
-			paper-input   { display: block; }
+			paper-input { 
+				display: block; 
+			}
+			paper-input /deep/ .focused-underline {
+				background-color: #FBC02D;
+			}
 		</style>
 	</template>
 
@@ -69,6 +74,7 @@
 				ready: function() {
 					this.newImage = '';
 					this.appId = CabbageConf.applicationId;
+					this.endpoint = CabbageConf.endpoint;
 				},
 				getData: function() {
 					return {

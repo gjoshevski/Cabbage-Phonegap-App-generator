@@ -6,14 +6,14 @@
 		<core-localstorage id="storage" name="cabbage-localstorage-menu"></core-localstorage>
 
 		<core-ajax  id="getItem"
-					url="http://127.0.0.1:3000/restoranmenus/{{ menuId }}"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					menthod="GET",
 					handleAs="json"
 					on-core-response="{{ onMenuInfoReceived }}"
 					on-core-error="{{ onMenuInfoError }}"></core-ajax>
 
 		<core-ajax  id="deleteMenu"
-					url="http://127.0.0.1:3000/restoranmenus/{{ menuId }}"
+					url="{{ endpoint }}/restoranmenus/{{ menuId }}"
 					method="DELETE"
 					on-core-response="{{ onMenuItemDeleteResponse }}"
 					on-core-error="{{ onMenuItemDeleteError }}"></core-ajax>					
@@ -25,9 +25,9 @@
 			<h3>Description:</h3>
 			<p>{{ description }}</p>
 
-			<div id="fab-wrapper" horizontal end-justified layout>
-				<paper-fab icon="clear" on-click="{{ onDeleteButtonClick }}" style="background-color: red;"></paper-fab>
-				<paper-fab icon="create" on-click="{{ onEditButtonClick }}" style="background-color: green;"></paper-fab>
+			<div id="fab-wrapper" horizontal end-justified layout hidden?="{{ !isAdmin }}">
+				<paper-fab icon="clear" on-click="{{ onDeleteButtonClick }}" style="background-color: #D32F2F;"></paper-fab>
+				<paper-fab icon="create" on-click="{{ onEditButtonClick }}" style="background-color: #4CAF50;"></paper-fab>
 			</div>
 		</div>
 
@@ -74,6 +74,8 @@
 					this.price = '';
 					this.description = '';
 					this.image = '';
+					this.endpoint = CabbageConf.endpoint;
+					this.isAdmin = CabbageConf.isAdmin;
 				},
 				refresh: function() {
 					if(this.menuId !== undefined || this.menuId !== '') {
