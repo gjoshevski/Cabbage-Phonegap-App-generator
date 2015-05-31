@@ -7,6 +7,7 @@ var async  = require('async');
 
 var util = {
 	serverRootPath: '/Users/viktorot/SchoolProjects/cabbage-core',
+	apk: '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk',
 	outputDir: '/priv/cordova/www'
 	// outputDir: '/templates'
 
@@ -21,8 +22,8 @@ var util = {
 exports.compile = function(req, resp) {
 	var data = {
 		appId: '123',
-		admin: false,
-		modules: ['bcard', 'menu']
+		admin: true,
+		modules: ['bcard', 'menu', 'points']
 	};
 
 	async.waterfall([
@@ -44,7 +45,7 @@ exports.compile = function(req, resp) {
 					console.log('getapp | index template saved');
 					callback(null, true);
 				}
-			});			// save index teplate
+			});			
 		},
 		function(saved, callback) {
 			if(saved) {
@@ -54,7 +55,7 @@ exports.compile = function(req, resp) {
 			}
 			else {
 				callback(null, undefined);
-			}				// reder config template
+			}				
 		},
 		function(template, callback) {
 			var root = util.serverRootPath;
@@ -74,7 +75,7 @@ exports.compile = function(req, resp) {
 			}
 			else {
 				callback(null, false);
-			} 			// save config template
+			} 			
 		},
 		function(saved, callback) {
 			if(saved === true) {
@@ -93,11 +94,33 @@ exports.compile = function(req, resp) {
 			}
 			else {
 				callback(null, false);
-			} 			// compile
+			}
 		}
 	],
 	function(error, done) {
-		resp.jsonp(done);
+		if(done) {
+			resp.jsonp({compile: 'done'});
+			// var root = util.serverRootPath;
+			// var apkPath = util.apk;
+			// var appName = 'test';
+
+			// fs.readFile(root+apkPath, function(err, data) {
+			// 	if(!err) {
+			// 		resp.set('Content-Length', data.length);
+			// 		resp.set('Content-Type', 'application/vnd.android.package-archive');
+			// 		resp.set('Content-Disposition', 'attachment; filename='+ appName +'.apk');
+			// 		resp.status(200);
+			// 		resp.end(data);
+			// 	} else {
+			// 		console.log("getapp | get apk error");
+			// 		resp.jsonp({compile: 'failed'});
+			// 	}
+			// });
+		}
+		else {
+			resp.jsonp({compile: 'failed'});	
+		}
+		
 	});
 
 };

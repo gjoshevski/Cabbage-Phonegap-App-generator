@@ -46,7 +46,7 @@
 	<more-routing-config driver="hash"></more-routing-config>
 	{% for module in modules %}
 
-		{% if module == 'qr' %}
+		{% if module == 'points' %}
 		<more-route name="qr" path="/qr"></more-route>
 		{% elseif module == 'bcard' %}
 		<more-route name="b-card" path="/b-card">
@@ -75,7 +75,7 @@
 					<core-menu>
 						{% for module in modules %}
 
-						{% if module == 'qr' %}
+						{% if module == 'points' %}
 						<core-item label="Qr" route="qr" >
 							<a href="{% raw %} {{ urlFor('qr') }} {% endraw %}"></a>
 						</core-item>
@@ -104,7 +104,7 @@
 					<core-pages>
 						{% for module in modules %}
 
-						{% if module == 'qr' %}
+						{% if module == 'points' %}
 						<section route="qr">
 							<cabbage-qr></cabbage-qr>
 						</section>

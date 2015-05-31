@@ -9,11 +9,12 @@
 	<link rel="import" href="elements.html">
 
 	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
-	<!-- <script type="text/javascript" src="cordova.js"></script> -->
-	<!-- <script type="text/javascript" src="barcodescanner.js"></script> -->
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="barcodescanner.js"></script>
 
-	<script type="text/javascript" src="config.js"></script>	
+	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript" src="js/qr.js"></script>
+	<script type="text/javascript" src="js/news.js"></script>
 
 	<style type="text/css">
 		core-drawer-panel:not([narrow]) #navicon {
@@ -23,6 +24,11 @@
 
 	<script type="text/javascript">
 		document.addEventListener('polymer-ready', function() {
+
+			if(CabbageNews !== undefined) {
+				// CabbageNews.init();
+			}
+
 			window.addEventListener('hashchange', function() {
 				if(window.location.hash.indexOf('/menu/edit') !== -1) {
 					// edit item
@@ -49,6 +55,8 @@
 		
 		<more-route name="b-card" path="/b-card">
 			
+			<more-route name="b-card-edit" path="/edit"></more-route>
+			
 		</more-route>
 		
 
@@ -58,7 +66,16 @@
 		<more-route name="menu" path="/menu">
 			<more-route name="menu-info" path="/:id"></more-route>
 			
+			<more-route name="menu-add" path="/new"></more-route>
+			<more-route name="menu-edit" path="/edit/:id"></more-route>
+			
 		</more-route>
+		
+
+	
+
+		
+		<more-route name="qr" path="/qr"></more-route>
 		
 
 	
@@ -87,6 +104,14 @@
 						
 
 						
+
+						
+						<core-item label="Qr" route="qr" >
+							<a href=" {{ urlFor('qr') }} "></a>
+						</core-item>
+						
+
+						
 					</core-menu>
 				</more-route-selector>
 			</core-header-panel>
@@ -106,6 +131,10 @@
 							<cabbage-bcard></cabbage-bcard>
 						</section>
 						
+						<section route="b-card-edit">
+							<cabbage-bcard-edit></cabbage-bcard-edit>
+						</section>
+						
 						
 
 						
@@ -118,6 +147,21 @@
 							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
 						</section>
 						
+						<section route="menu-add">
+							<cabbage-menu-item-add></cabbage-menu-item-add>
+						</section>
+						<section route="menu-edit">
+							<cabbage-menu-item-edit menuId="{{ params.id }}"></cabbage-menu-item-edit>
+						</section>
+						
+						
+
+						
+
+						
+						<section route="qr">
+							<cabbage-qr></cabbage-qr>
+						</section>
 						
 
 						
