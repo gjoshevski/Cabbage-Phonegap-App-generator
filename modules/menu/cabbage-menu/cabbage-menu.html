@@ -1,41 +1,80 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 
 <polymer-element name="cabbage-menu" attributes="menu">
 	<template>
 
-		<core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage>
+		<!-- <core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage> -->
 
 		<core-ajax  id="getMenu"
 					auto
-					url="http://192.168.0.16:3000/api/menu"
+					url="{{ endpoint }}/restoranmenus/byApp/{{ appId }}"
 					method="GET"
 					handleAs="json"
-					on-core-response="{{ onMenuDataReceived }}"></core-ajax>
+					on-core-response="{{ onMenuDataReceived }}"
+					on-core-error="{{ onMenuDataError }}"></core-ajax>
 
-		<template repeat="{{ item in menu }}">
-			<cabbage-menu-item  menuId="{{ item.id }}"
-								name="{{ item.name }}"
-								price="{{ item.price }}"
-								image="{{ item.image }}"></cabbage-menu-item>
-		</template>
+		<div id="wrapper">
+			<template repeat="{{ item in menu }}">
+				<cabbage-menu-item  menuId="{{ item._id }}"
+									name="{{ item.nameOfItem }}"
+									price="{{ item.priceInEuroCents }}"
+									image="{{ item.imageUrl }}"></cabbage-menu-item>
+			</template>
 
-		<div horizontal end-justified layout>
-			<paper-fab icon="add" on-click="{{ onAddButtonClick }}" style="background-color: green;"></paper-fab>
+			<div horizontal end-justified layout hidden?="{{ !isAdmin }}">
+				<paper-fab icon="add" on-click="{{ onAddButtonClick }}"></paper-fab>
+			</div>
 		</div>
 
+		<style>
+			:host {
+				display: block;
+			}
+			#wrapper {
+				background-color: #eee;
+				margin: 50px auto 20px auto;
+				width: 70%;
+				font-size: 18px;
+				font-weight: 200;
+				line-height: 30px;
+				background-color: #eee;
+				border-radius: 6px;
+				padding: 30px;
+				padding-bottom: 80px;
+				position: relative;
+			}
+			paper-fab {
+				background-color: #4CAF50;
+				position: absolute;
+				bottom: 0px; right: 0px;
+				margin-bottom: 10px;
+				margin-right: 10px;
+			}
+		</style>
 	</template>
 	<script>
 		(function() {
 			Polymer({
 				ready: function() {
 					this.menu = [];
+					this.appId = CabbageConf.applicationId;
+					this.endpoint = CabbageConf.endpoint;
+					this.isAdmin = CabbageConf.isAdmin;
 					this.addEventListener('cbg-menu-item-click', this.onMenuItemClicked);
+				},
+				refresh: function() {
+					if(this.appId) {
+						this.$.getMenu.go();
+					}
 				},
 				onMenuItemClicked: function(event) {
 					MoreRouting.navigateTo('menu-info', {id: event.detail.id});
 				},
 				onMenuDataReceived: function(data) {
 					this.menu = data.detail.response;
+				},
+				onMenuDataError: function() {
+					console.error('cabbage-menu | error recieving menu data');
 				},
 				onAddButtonClick: function() {
 					MoreRouting.navigateTo('menu-add');

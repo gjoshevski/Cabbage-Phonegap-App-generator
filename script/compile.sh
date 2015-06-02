@@ -13,7 +13,7 @@ mkdir $DESTINATION_DIR
 for module in "$@"
 do
 	echo "Copying module '"$module"'..."
-	cp -r $PROJ_DIR$MODULES_DIR$module $PROJ_DIR$DESTINATION_DIR$module
+	cp -r $PROJ_DIR$MODULES_DIR$module $PROJ_DIR$DESTINATION_DIR
 	# echo  $PROJ_DIR$MODULES_DIR$module" "$PROJ_DIR$DESTINATION_DIR$module
 done
 

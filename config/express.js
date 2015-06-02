@@ -15,6 +15,7 @@ var fs = require('fs'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
+	cors = require('cors'),
 	mongoStore = require('connect-mongo')({
 		session: session
 	}),
@@ -45,6 +46,8 @@ module.exports = function(db) {
 		res.locals.url = req.protocol + '://' + req.headers.host + req.url;
 		next();
 	});
+
+	app.use(cors());
 
 	// Should be placed before express.static
 	app.use(compress({

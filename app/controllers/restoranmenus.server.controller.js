@@ -86,6 +86,10 @@ exports.list = function(req, res) {
 	});
 };
 
+exports.options = function(req, res) {
+	res.sendStatus(200);
+};
+
 /**
  * Restoranmenu middleware
  */

@@ -3,24 +3,25 @@
 <polymer-element name="cabbage-menu" attributes="menu">
 	<template>
 
-		<core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage>
+		<!-- <core-localstorage id="localstorage" name="cabbage-localstorage-menu" value="{{ menu }}"></core-localstorage> -->
 
 		<core-ajax  id="getMenu"
 					auto
-					url="http://127.0.0.1:3000/api/menu"
+					url="{{ endpoint }}/restoranmenus/byApp/{{ appId }}"
 					method="GET"
 					handleAs="json"
-					on-core-response="{{ onMenuDataReceived }}"></core-ajax>
+					on-core-response="{{ onMenuDataReceived }}"
+					on-core-error="{{ onMenuDataError }}"></core-ajax>
 
 		<div id="wrapper">
 			<template repeat="{{ item in menu }}">
-				<cabbage-menu-item  menuId="{{ item.id }}"
-									name="{{ item.name }}"
-									price="{{ item.price }}"
-									image="{{ item.image }}"></cabbage-menu-item>
+				<cabbage-menu-item  menuId="{{ item._id }}"
+									name="{{ item.nameOfItem }}"
+									price="{{ item.priceInEuroCents }}"
+									image="{{ item.imageUrl }}"></cabbage-menu-item>
 			</template>
 
-			<div horizontal end-justified layout>
+			<div horizontal end-justified layout hidden?="{{ !isAdmin }}">
 				<paper-fab icon="add" on-click="{{ onAddButtonClick }}"></paper-fab>
 			</div>
 		</div>
@@ -43,7 +44,7 @@
 				position: relative;
 			}
 			paper-fab {
-				background-color: green;
+				background-color: #4CAF50;
 				position: absolute;
 				bottom: 0px; right: 0px;
 				margin-bottom: 10px;
@@ -56,16 +57,24 @@
 			Polymer({
 				ready: function() {
 					this.menu = [];
+					this.appId = CabbageConf.applicationId;
+					this.endpoint = CabbageConf.endpoint;
+					this.isAdmin = CabbageConf.isAdmin;
 					this.addEventListener('cbg-menu-item-click', this.onMenuItemClicked);
 				},
-				attributeChanged: function(attrName, oldVal, newVal) {
-					console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+				refresh: function() {
+					if(this.appId) {
+						this.$.getMenu.go();
+					}
 				},
 				onMenuItemClicked: function(event) {
 					MoreRouting.navigateTo('menu-info', {id: event.detail.id});
 				},
 				onMenuDataReceived: function(data) {
 					this.menu = data.detail.response;
+				},
+				onMenuDataError: function() {
+					console.error('cabbage-menu | error recieving menu data');
 				},
 				onAddButtonClick: function() {
 					MoreRouting.navigateTo('menu-add');

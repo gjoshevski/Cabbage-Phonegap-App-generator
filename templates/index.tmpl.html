@@ -9,12 +9,11 @@
 	<link rel="import" href="elements.html">
 
 	<script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script>
-	<script type="text/javascript" src="cordova.js"></script>
-	<script type="text/javascript" src="barcodescanner.js"></script>
+	<!-- <script type="text/javascript" src="cordova.js"></script> -->
+	<!-- <script type="text/javascript" src="barcodescanner.js"></script> -->
 
-	<script type="text/javascript" src="config.js"></script>
+	<script type="text/javascript" src="config.js"></script>	
 	<script type="text/javascript" src="js/qr.js"></script>
-	<script type="text/javascript" src="js/news.js"></script>
 
 	<style type="text/css">
 		core-drawer-panel:not([narrow]) #navicon {
@@ -24,11 +23,6 @@
 
 	<script type="text/javascript">
 		document.addEventListener('polymer-ready', function() {
-
-			if(CabbageNews !== undefined) {
-				// CabbageNews.init();
-			}
-
 			window.addEventListener('hashchange', function() {
 				if(window.location.hash.indexOf('/menu/edit') !== -1) {
 					// edit item
@@ -50,35 +44,27 @@
 <body fullbleed layout vertical>
 
 	<more-routing-config driver="hash"></more-routing-config>
-	
+	{% for module in modules %}
 
-		
+		{% if module == 'points' %}
+		<more-route name="qr" path="/qr"></more-route>
+		{% elseif module == 'bcard' %}
 		<more-route name="b-card" path="/b-card">
-			
+			{% if admin %}
 			<more-route name="b-card-edit" path="/edit"></more-route>
-			
+			{% endif %}
 		</more-route>
-		
-
-	
-
-		
+		{% elseif module == 'menu' %}
 		<more-route name="menu" path="/menu">
 			<more-route name="menu-info" path="/:id"></more-route>
-			
+			{% if admin %}
 			<more-route name="menu-add" path="/new"></more-route>
 			<more-route name="menu-edit" path="/edit/:id"></more-route>
-			
+			{% endif %}
 		</more-route>
-		
+		{% endif %}
 
-	
-
-		
-		<more-route name="qr" path="/qr"></more-route>
-		
-
-	
+	{% endfor %}
 
 	<template is="auto-binding" id="app">
 		<core-drawer-panel id="drawer">
@@ -87,31 +73,23 @@
 				<core-toolbar style="background-color: #FBC02D">Ze Menu</core-toolbar>
 				<more-route-selector>
 					<core-menu>
-						
+						{% for module in modules %}
 
-						
-						<core-item label="B Card" route="b-card" >
-							<a href=" {{ urlFor('b-card') }} "></a>
-						</core-item>
-						
-
-						
-
-						
-						<core-item label="Menu" route="menu">
-							<a href=" {{ urlFor('menu') }} "></a>
-						</core-item>
-						
-
-						
-
-						
+						{% if module == 'points' %}
 						<core-item label="Qr" route="qr" >
-							<a href=" {{ urlFor('qr') }} "></a>
+							<a href="{% raw %} {{ urlFor('qr') }} {% endraw %}"></a>
 						</core-item>
-						
+						{% elseif module == 'bcard' %}
+						<core-item label="B Card" route="b-card" >
+							<a href="{% raw %} {{ urlFor('b-card') }} {% endraw %}"></a>
+						</core-item>
+						{% elseif module == 'menu' %}
+						<core-item label="Menu" route="menu">
+							<a href="{% raw %} {{ urlFor('menu') }} {% endraw %}"></a>
+						</core-item>
+						{% endif %}
 
-						
+						{% endfor %}
 					</core-menu>
 				</more-route-selector>
 			</core-header-panel>
@@ -122,49 +100,41 @@
 					<paper-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></paper-icon-button>
 					<h1>Ze Title</h1>
 				</core-toolbar>
-				<more-route-selector selectedParams="{{ params }}">
+				<more-route-selector selectedParams="{% raw %}{{ params }}{% endraw %}">
 					<core-pages>
-						
+						{% for module in modules %}
 
-						
+						{% if module == 'points' %}
+						<section route="qr">
+							<cabbage-qr></cabbage-qr>
+						</section>
+						{% elseif module == 'bcard' %}
 						<section route="b-card">
 							<cabbage-bcard></cabbage-bcard>
 						</section>
-						
+						{% if admin %}
 						<section route="b-card-edit">
 							<cabbage-bcard-edit></cabbage-bcard-edit>
 						</section>
-						
-						
-
-						
-
-						
+						{% endif %}
+						{% elseif module == 'menu' %}
 						<section route="menu">
 							<cabbage-menu></cabbage-menu>
 						</section>
 						<section route="menu-info">
-							<cabbage-menu-view menuId="{{ params.id }}"></cabbage-menu-view>
+							<cabbage-menu-view menuId="{% raw %}{{ params.id }}{% endraw %}"></cabbage-menu-view>
 						</section>
-						
+						{% if admin %}
 						<section route="menu-add">
 							<cabbage-menu-item-add></cabbage-menu-item-add>
 						</section>
 						<section route="menu-edit">
-							<cabbage-menu-item-edit menuId="{{ params.id }}"></cabbage-menu-item-edit>
+							<cabbage-menu-item-edit menuId="{% raw %}{{ params.id }}{% endraw %}"></cabbage-menu-item-edit>
 						</section>
-						
-						
+						{% endif %}
+						{% endif %}
 
-						
-
-						
-						<section route="qr">
-							<cabbage-qr></cabbage-qr>
-						</section>
-						
-
-						
+						{% endfor %}
 					</core-pages>
 				</more-route-selector>
 			</core-header-panel>
