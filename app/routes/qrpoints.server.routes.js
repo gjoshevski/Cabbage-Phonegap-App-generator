@@ -11,6 +11,8 @@ module.exports = function(app) {
 	app.route('/qrpoints/byappanduser/:appId/:userImei')
 		.get(qrpoints.list);
 
+	app.route('/qrpoints/sumbyappanduser/:appId/:userImei')
+		.get(qrpoints.sum);
 
 	app.route('/qrpoints/:qrpointId')
 		.get(qrpoints.read)

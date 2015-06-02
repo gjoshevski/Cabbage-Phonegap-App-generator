@@ -1,18 +1,17 @@
 'use strict';
 
 module.exports = function(app) {
-	var users = require('../../app/controllers/users.server.controller');
 	var bcards = require('../../app/controllers/bcards.server.controller');
 
 	// Bcards Routes
-	app.route('/bcards')
+	app.route('/bcards/:appId')
 		.get(bcards.list)
-		.post(users.requiresLogin, bcards.create);
+		.post(bcards.create);
 
 	app.route('/bcards/:bcardId')
 		.get(bcards.read)
-		.put(users.requiresLogin, bcards.hasAuthorization, bcards.update)
-		.delete(users.requiresLogin, bcards.hasAuthorization, bcards.delete);
+		.put(bcards.update)
+		.delete(bcards.delete);
 
 	// Finish by binding the Bcard middleware
 	app.param('bcardId', bcards.bcardByID);

@@ -6,13 +6,15 @@ module.exports = function(app) {
 
 	// News Routes
 	app.route('/news')
-		.get(news.list)
-		.post(users.requiresLogin, news.create);
+		.post(news.create);
+		
+	app.route('/news/byappid/:appId')
+		.get(news.list);
 
 	app.route('/news/:newsId')
 		.get(news.read)
-		.put(users.requiresLogin, news.hasAuthorization, news.update)
-		.delete(users.requiresLogin, news.hasAuthorization, news.delete);
+		.put(news.update)
+		.delete(news.delete);
 
 	// Finish by binding the News middleware
 	app.param('newsId', news.newsByID);

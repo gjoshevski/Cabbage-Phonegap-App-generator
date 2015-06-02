@@ -73,7 +73,9 @@ exports.delete = function(req, res) {
  * List of News
  */
 exports.list = function(req, res) { 
-	News.find().sort('-created').populate('user', 'displayName').exec(function(err, news) {
+	var appId = req.params.appId;
+		
+	News.find({ 'appId': appId }).sort('-created').populate('user', 'displayName').exec(function(err, news) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
