@@ -15,10 +15,6 @@ exports.create = function(req, res) {
 	var restoranmenu = new Restoranmenu(req.body);
 	restoranmenu.user = req.user;
 
-	res.header('Access-Control-Allow-Origin', '*'); 
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
-
 	restoranmenu.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -34,9 +30,6 @@ exports.create = function(req, res) {
  * Show the current Restoranmenu
  */
 exports.read = function(req, res) {
-	res.header('Access-Control-Allow-Origin', '*'); 
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
 	res.jsonp(req.restoranmenu);
 };
 
@@ -47,10 +40,6 @@ exports.update = function(req, res) {
 	var restoranmenu = req.restoranmenu ;
 
 	restoranmenu = _.extend(restoranmenu , req.body);
-
-	res.header('Access-Control-Allow-Origin', '*'); 
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
 
 	restoranmenu.save(function(err) {
 		if (err) {
@@ -69,10 +58,6 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var restoranmenu = req.restoranmenu ;
 
-	res.header('Access-Control-Allow-Origin', '*'); 
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
-
 	restoranmenu.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -90,10 +75,6 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) { 
 	var appId = req.params.appId;	
 
-	res.header('Access-Control-Allow-Origin', '*'); 
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
-
 	Restoranmenu.find({ 'appId': appId }).sort('-created').populate('user', 'displayName').exec(function(err, restoranmenus) {
 		if (err) {
 			return res.status(400).send({
@@ -106,9 +87,6 @@ exports.list = function(req, res) {
 };
 
 exports.options = function(req, res) {
-	res.header('Access-Control-Allow-Origin', '*'); 
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
 	res.sendStatus(200);
 };
 
@@ -119,9 +97,6 @@ exports.restoranmenuByID = function(req, res, next, id) {
 	Restoranmenu.findById(id).populate('user', 'displayName').exec(function(err, restoranmenu) {
 		if (err) return next(err);
 		if (! restoranmenu) return next(new Error('Failed to load Restoranmenu ' + id));
-		res.header('Access-Control-Allow-Origin', '*'); 
-		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-		res.header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Accept');
 		req.restoranmenu = restoranmenu ;
 		next();
 	});
