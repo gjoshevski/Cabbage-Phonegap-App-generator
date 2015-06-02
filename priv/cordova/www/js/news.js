@@ -1,5 +1,5 @@
 var CabbageNews = {
-	pullInterval: 5*1000,
+	pullInterval: 20*1000,
 	timerId: undefined,
 
 	init: function() {
@@ -12,7 +12,7 @@ var CabbageNews = {
 	},
 	stop: function() {
 		if(this.timerId !== undefined) {
-			window.setTimeout(this.timerId);
+			window.clearTimeout(this.timerId);
 			this.timerId = undefined;
 		}
 	},
@@ -20,26 +20,40 @@ var CabbageNews = {
 		this.stop();
 		this.getNews();
 	},
-	showNotification: function(text) {
+	showNotification: function(text, url) {
 		var now = new Date().getTime();
 		cordova.plugins.notification.local.schedule({
 			id: 101,
 			text: text,
-			at: now
-		});	
+			at: now,
+			data: {url: url}
+		});
+
+		var self = this;
+		cordova.plugins.notification.local.on('click', function(notification){
+			var data = JSON.parse(notification.data);
+			var url = data.url;
+			self.openInBrowser(url);
+		});
+	},
+	openInBrowser: function(url) {
+		window.open(url, '_blank', 'location=yes');
 	},
 	getNews: function() {
 		var self = this;
-		$.get({
-			type: 'GET',
-			url: CabbageConf.endpoint + '/news'
-		})
-		.done(function(response) {
-			self.showNotification('Test notif');
-			self.start();
-		})
-		.fail(function() {
-			console.log('cabbage-news | news load error')
-		});
+		self.showNotification('Test notif', 'http://reddit.com');
+		self.start();
+
+		// $.get({
+		// 	type: 'GET',
+		// 	url: CabbageConf.endpoint + '/news'
+		// })
+		// .done(function(response) {
+		// 	self.showNotification('Test notif');
+		// 	self.start();
+		// })
+		// .fail(function() {
+		// 	console.log('cabbage-news | news load error')
+		// });
 	}
 }

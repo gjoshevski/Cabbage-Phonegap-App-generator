@@ -27,7 +27,7 @@
 		document.addEventListener('polymer-ready', function() {
 
 			if(CabbageNews !== undefined) {
-				// CabbageNews.init();
+				CabbageNews.init();
 			}
 
 			window.addEventListener('hashchange', function() {
@@ -124,7 +124,7 @@
 			<core-header-panel main>
 				<core-toolbar id="main-title" layout horizontal end>
 					<paper-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></paper-icon-button>
-					<h1>Ze Title</h1>
+					<h1>CabbageApp</h1>
 				</core-toolbar>
 				<more-route-selector selectedParams="{{ params }}">
 					<core-pages>
