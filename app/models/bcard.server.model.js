@@ -16,13 +16,39 @@ var BcardSchema = new Schema({
 		required: 'Please fill Bcard name',
 		trim: true
 	},
+	address: {
+		type: String,
+		default: '',
+		required: 'Please fill Bcard adress',
+		trim: true
+	},
+	number: {
+		type: String,
+		default: '',
+		required: 'Please fill Bcard number',
+		trim: true
+	},
+	image: {
+		type: String,
+		default: '',
+		required: 'Please fill Bcard image',
+		trim: true
+	},
+	email: {
+		type: String,
+		default: '',
+		required: 'Please fill Bcard email',
+		trim: true
+	},
 	created: {
 		type: Date,
 		default: Date.now
 	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
+	appId: {
+		type: String,
+		default: '',
+		required: 'Please fill Bcard appId',
+		trim: true
 	}
 });
 

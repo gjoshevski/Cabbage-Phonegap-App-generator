@@ -73,7 +73,9 @@ exports.delete = function(req, res) {
  * List of Bcards
  */
 exports.list = function(req, res) { 
-	Bcard.find().sort('-created').populate('user', 'displayName').exec(function(err, bcards) {
+	var appId = req.params.appId;
+	
+	Bcard.find({ 'appId': appId}).sort('-created').populate('user', 'displayName').exec(function(err, bcards) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

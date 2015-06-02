@@ -34,7 +34,13 @@ var NewsSchema = new Schema({
 	created: {
 		type: Date,
 		default: Date.now
-	}
+	},
+	appId: {
+		type: String,
+		default: '',
+		required: 'Please fill AppId',
+		trim: true
+	},
 });
 
 mongoose.model('News', NewsSchema);
