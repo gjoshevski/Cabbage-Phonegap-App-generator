@@ -10,7 +10,25 @@ var util = {
 	apk: '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk',
 	outputDir: '/priv/cordova/www'
 	// outputDir: '/templates'
+};
 
+exports.download = function(req, resp) {
+	var root = util.serverRootPath;
+	var apkPath = util.apk;
+	var appName = req.params.appName;
+
+	fs.readFile(root+apkPath, function(err, data) {
+		if(!err) {
+			resp.set('Content-Length', data.length);
+			resp.set('Content-Type', 'application/vnd.android.package-archive');
+			resp.set('Content-Disposition', 'attachment; filename='+ appName +'.apk');
+			resp.status(200);
+			resp.end(data);
+		} else {
+			console.log('getapp | get apk error');
+			resp.jsonp({compile: 'failed'});
+		}
+	});
 };
 
 /*
@@ -21,16 +39,19 @@ var util = {
 */
 exports.compile = function(req, resp) {
 	var data = {
-		appId: '123',
-		admin: true,
-		modules: ['bcard', 'menu', 'points']
+		appId: 	req.body.appId,
+		admin: 	req.body.admin === 'false' ? false : true,
+		modules: req.body.modules,
+		name: req.body.name
 	};
+
+	console.log(data);
 
 	async.waterfall([
 		function(callback) {
 			var temp = swig.renderFile(util.serverRootPath + '/templates/index.tmpl.html', data);		
 			console.log('getapp | index template rendered');
-			callback(null, temp);					// render index template
+			callback(null, temp);				
 		},
 		function(template, callback) {
 			var root = util.serverRootPath;
@@ -99,23 +120,7 @@ exports.compile = function(req, resp) {
 	],
 	function(error, done) {
 		if(done) {
-			resp.jsonp({compile: 'done'});
-			// var root = util.serverRootPath;
-			// var apkPath = util.apk;
-			// var appName = 'test';
-
-			// fs.readFile(root+apkPath, function(err, data) {
-			// 	if(!err) {
-			// 		resp.set('Content-Length', data.length);
-			// 		resp.set('Content-Type', 'application/vnd.android.package-archive');
-			// 		resp.set('Content-Disposition', 'attachment; filename='+ appName +'.apk');
-			// 		resp.status(200);
-			// 		resp.end(data);
-			// 	} else {
-			// 		console.log("getapp | get apk error");
-			// 		resp.jsonp({compile: 'failed'});
-			// 	}
-			// });
+			resp.jsonp({compile: 'done', url: '/get-app/' + data.name});
 		}
 		else {
 			resp.jsonp({compile: 'failed'});	

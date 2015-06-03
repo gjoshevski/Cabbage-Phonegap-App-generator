@@ -17,7 +17,7 @@ do
 	# echo  $PROJ_DIR$MODULES_DIR$module" "$PROJ_DIR$DESTINATION_DIR$module
 done
 
-# cd 'priv/cordova'
-# exec cordova build
+cd 'priv/cordova'
+exec cordova build
 
 echo "BUILD SUCCESSFUL"

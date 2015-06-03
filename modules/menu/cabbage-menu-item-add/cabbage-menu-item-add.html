@@ -9,7 +9,7 @@
 					handleAs="json"
 					contentType="application/x-www-form-urlencoded"
 					on-core-response="{{ onMenuItemSaveResponse }}"
-					on-core-error="{{ onMenuItemSavError }}"></core-ajax>
+					on-core-error="{{ onMenuItemSaveError }}"></core-ajax>
 
 		<div id="wrapper">
 			<core-image preload fade fullbleed sizing="cover" src="{{ newImage }}"></core-image>
@@ -56,6 +56,10 @@
 			paper-input /deep/ .focused-underline {
 				background-color: #FBC02D;
 			}
+			paper-input.error /deep/ .unfocused-underline,
+			paper-input.error /deep/ .focused-underline {
+				background-color: #D32F2F;
+			}
 		</style>
 	</template>
 
@@ -83,8 +87,15 @@
 				onMenuItemSaveResponse: function(data) {
 					MoreRouting.navigateTo('menu');
 				},
-				onMenuItemSaveError: function() {
+				onMenuItemSaveError: function(error) {
 					console.error('cabbage-menu-add | error saving item');
+					var message = error.detail.response.response.message;
+					if(message === 'Please fill Item name') {
+						this.$.name.setAttribute('class', 'error');
+					}
+					if(message == 'Please fill description') {
+						this.$.description.setAttribute('class', 'error');
+					}
 				}
 			});
 		})();

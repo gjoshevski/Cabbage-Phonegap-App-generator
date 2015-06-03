@@ -65,6 +65,10 @@
 			paper-input /deep/ .focused-underline {
 				background-color: #FBC02D;
 			}
+			paper-input.error /deep/ .unfocused-underline,
+			paper-input.error /deep/ .focused-underline {
+				background-color: #D32F2F;
+			}
 		</style>
 	</template>
 
@@ -93,6 +97,7 @@
 					}
 				},
 				onUpdateButtonClick: function() {
+					this.removeErrors();
 					this.$.updateMenu.params = this.getData();
 					this.$.updateMenu.go();
 					
@@ -100,8 +105,16 @@
 				onMenuItemUpdateResponse: function() {
 					MoreRouting.navigateTo('menu-info', {id: this.menuId});		
 				},
-				onMenuItemUpdateError: function() {
+				onMenuItemUpdateError: function(error) {
 					console.error('cabbage-menu-edit | update error');
+					var message = error.detail.response.response.message;
+					if(message === 'Please fill Item name') {
+						this.$.name.setAttribute('class', 'error');
+					}
+					if(message == 'Please fill description') {
+						this.$.description.setAttribute('class', 'error');
+					}
+					
 				},
 				onMenuInfoReceived: function(data) {
 					var menuData = data.detail.response;
@@ -113,8 +126,9 @@
 				onMenuInfoError: function(error) {
 					console.error('cabbage-menu-edit | get info error');
 				},
-				onImageUrlChange: function() {
-										
+				removeErrors: function() {
+					this.$.name.setAttribute('class', '');
+					this.$.description.setAttribute('class', '');
 				}
 			});
 		})();
