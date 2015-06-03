@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="barcodescanner.js"></script>
 
 	<script type="text/javascript" src="config.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/qr.js"></script>
 	<script type="text/javascript" src="js/news.js"></script>
 
@@ -26,7 +27,7 @@
 		document.addEventListener('polymer-ready', function() {
 
 			if(CabbageNews !== undefined) {
-				// CabbageNews.init();
+				CabbageNews.init();
 			}
 
 			window.addEventListener('hashchange', function() {
@@ -41,6 +42,9 @@
 				}
 				else if(window.location.hash.indexOf('/menu') !== -1) {
 					document.querySelector('cabbage-menu').refresh();
+				}
+				else if(window.location.hash.indexOf('/b-card') !== -1) {
+					document.querySelector('cabbage-bcard').refresh();
 				}
 			});
 		});
@@ -120,7 +124,7 @@
 			<core-header-panel main>
 				<core-toolbar id="main-title" layout horizontal end>
 					<paper-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></paper-icon-button>
-					<h1>Ze Title</h1>
+					<h1>CabbageApp</h1>
 				</core-toolbar>
 				<more-route-selector selectedParams="{{ params }}">
 					<core-pages>

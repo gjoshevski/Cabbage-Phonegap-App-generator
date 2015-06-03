@@ -3,9 +3,17 @@
 <polymer-element name="cabbage-bcard-edit" attributes="">
 	<template>
 
+	<core-ajax  id="getBCard"
+				url="{{ endpoint }}/bcards/{{ appId }}"
+				method="GET"
+				handleAs="json"
+				contentType="application/x-www-form-urlencoded"
+				on-core-response="{{ onBCardGetResponse }}"
+				on-core-error="{{ onBCardGetError }}"></core-ajax>
+
 		<core-ajax  id="updateBCard"
-					url="http://127.0.0.1:3000/bcard"
-					method="POST"
+					url="{{ endpoint }}/bcards/{{ id }}"
+					method="PUT"
 					handleAs="json"
 					contentType="application/x-www-form-urlencoded"
 					on-core-response="{{ onBCardUpdateResponse }}"
@@ -15,10 +23,10 @@
 			<core-image preload fade fullbleed sizing="cover" src="{{ newImage }}"></core-image>
 			<div id="input-wrapper">
 				<paper-input id="image" value="{{ newImage }}" label="Image"></paper-input>
-				<paper-input id="name" label="Name"></paper-input>
-				<paper-input id="address" label="Address"></paper-input>
-				<paper-input id="phone" label="Phone number"></paper-input>
-				<paper-input id="email" label="Email"></paper-input>
+				<paper-input id="name" value="{{ name }}" label="Name"></paper-input>
+				<paper-input id="address" value="{{ address }}" label="Address"></paper-input>
+				<paper-input id="number" value="{{ number }}" label="Phone number"></paper-input>
+				<paper-input id="email" value="{{ email }}" label="Email"></paper-input>
 			</div>
 			<paper-fab icon="done" on-click="{{ onUpdateButtonClick }}" style="background-color: #4CAF50"></paper-fab>
 		</div>
@@ -61,34 +69,83 @@
 			paper-input /deep/ .focused-underline {
 				background-color: #FBC02D;
 			}
+			paper-input.error /deep/ .unfocused-underline,
+			paper-input.error /deep/ .focused-underline {
+				background-color: #D32F2F;
+			}
 		</style>
 	</template>
 	<script>
 		(function () {
 			Polymer({
 				ready: function() {
+					this.endpoint = CabbageConf.endpoint;
 					this.appId = CabbageConf.applicationId;
 					this.newImage = '';
+
+					this.id = '';
+					this.name = '';
+					this.email = '';
+					this.address = '';
+					this.number = '';
+					this.image = '';
+
+					this.$.getBCard.go();
 				},
 				getData: function() {
 					return {
 						'name': this.$.name.value,
 						'address': this.$.address.value,
 						'email': this.$.email.value,
-						'number': this.$.phone.value,
-						'image': this.$.image.value
+						'number': this.$.number.value,
+						'image': this.newImage
 					};
 				},
+				onBCardGetResponse: function(data) {
+					var bCardData = data.detail.response[0];
+					this.id = bCardData._id;
+					this.name = bCardData.name;
+					this.address = bCardData.address;
+					this.email = bCardData.email;
+					this.number = bCardData.number;
+					this.image = bCardData.image;
+					this.newImage = this.image;
+				},
+				onBCardGetError: function() {
+					console.error('bcard | get data error');
+				},
 				onUpdateButtonClick: function() {
-					MoreRouting.navigateTo('b-card');
-					// this.$.updateBCard.params = this.getData();
-					// this.$.updateBCard.go();
+					this.$.updateBCard.params = this.getData();
+					this.$.updateBCard.go();
 				},
 				onBCardUpdateResponse: function() {
 					MoreRouting.navigateTo('b-card');
 				},
-				onBCardUpdateError: function() {
+				onBCardUpdateError: function(error) {
 					console.error('bcard-update | update error');
+					var message = error.detail.response.response.message;
+					if(message === 'Please fill Bcard name') {
+						this.$.name.setAttribute('class', 'error');
+					}
+					if(message === 'Please fill Bcard adress') {
+						this.$.address.setAttribute('class', 'error');
+					}
+					if(message === 'Please fill Bcard image') {
+						this.$.image.setAttribute('class', 'error');
+					}
+					if(message === 'Please fill Bcard number') {
+						this.$.number.setAttribute('class', 'error');
+					}
+					if(message === 'Please fill Bcard email') {
+						this.$.email.setAttribute('class', 'error');
+					}
+				},
+				removeErrors: function() {
+					this.$.name.setAttribute('class', '');
+					this.$.image.setAttribute('class', '');
+					this.$.address.setAttribute('class', '');
+					this.$.email.setAttribute('class', '');
+					this.$.number.setAttribute('class', '');
 				}
 			});
 		})();

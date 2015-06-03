@@ -2,8 +2,24 @@
 
 <polymer-element name="cabbage-qr" attributes="">
 	<template>
+
+		<core-ajax  id="getPoints"
+					url="{{ endpoint }}/qrpoints/sumbyappanduser/{{ appId }}/{{ userId }}"
+					method="GET"
+					handleAs="json"
+					on-core-response="{{ onPointsDataReceived }}"
+					on-core-error="{{ onPointsDataError }}"></core-ajax>
+
+		<core-ajax  id="addPoints"
+					url="{{ endpoint }}/qrpoints"
+					method="POST"
+					handleAs="json"
+					contentType="application/x-www-form-urlencoded"
+					on-core-response="{{ onPointsUpdateResponse }}"
+					on-core-error="{{ onPointsUpdateError }}"></core-ajax>
+
 		<div id="wrapper">
-			<h3>Phone ID => {{ phoneId }}</h3>
+			<!-- <h3>Phone ID => {{ phoneId }}</h3> -->
 			<h3>You currently have {{ points }} points.</h3>
 			<h3>Code: {{ code }}</h3>
 			<paper-fab icon="input" on-click="{{ onScanQrClick }}"></paper-fab>
@@ -40,28 +56,53 @@
 				ready: function() {
 					this.points = -4;
 					this.code = '[nothing]';
-					this.phoneId = '[empty]';
+
+					this.endpoint = CabbageConf.endpoint;
+					this.appId = CabbageConf.applicationId;
+
+					// this.userId = '101';
+					var self = this;
+					setTimeout(function() {
+						window.plugins.imeiplugin.getImei(function(imei) {
+							self.userId = imei;
+							self.$.getPoints.go();
+						});
+					}, 1000);
+
 					CabbageQr.init();
 				},
-				getPhoneId: function() {
-					var self = this;
-					window.plugins.imeiplugin.getImei(function(imei) {
-						self.phoneId = imei;
-					});
-				},
+				getData: function() {
+					return {
+						'appId': this.appId,
+						'userImei': this.userId,
+						'points': 1
+				}	;
+				},	
 				onScanQrClick: function() {
 					var self = this;
 
 					var success = function(resultObj) {
 						self.code = resultObj.text;
+						self.$.addPoints.params = self.getData();
+						self.$.addPoints.go();
 					};
 					var error = function(result) { 
 						console.log(result);
 					};
 
-					this.getPhoneId();
-
-					//CabbageQr.scan(success, error);
+					CabbageQr.scan(success, error);
+				},
+				onPointsDataReceived: function(data) {
+					this.points = data.detail.response;
+				},
+				onPointsDataError: function() {
+					console.log('cabbage-qr | get points error');
+				},
+				onPointsUpdateResponse: function(data) {
+					this.points++;;
+				},
+				onPointsUpdateError: function() {
+					console.log('cabbage-qr | update points error');
 				}
 			});
 		})();

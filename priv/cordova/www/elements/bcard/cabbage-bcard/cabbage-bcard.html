@@ -3,8 +3,10 @@
 <polymer-element name="cabbage-bcard" attributes="">
 	<template>
 
+	<core-localstorage id="cardStorage" name="cabbage-localstorage-bcard" value="{{ bCardData }}"></core-localstorage>
+
 		<core-ajax  id="getBCard"
-					url="http://127.0.0.1:3000/bcard/{{ appId }}"
+					url="{{ endpoint }}/bcards/{{ appId }}"
 					method="GET"
 					handleAs="json"
 					contentType="application/x-www-form-urlencoded"
@@ -12,7 +14,7 @@
 					on-core-error="{{ onBCardGetError }}"></core-ajax>
 
 		<div id="wrapper" vertical layout center>
-			<core-image preload fade fullbleed sizing="cover" src=""></core-image>
+			<core-image preload fade fullbleed sizing="cover" src="{{ image }}"></core-image>
 			<div id="info" vertical layout left>
 				<h3>Name: <span class="val">{{ name }}</span></h3> 
 				<h3>Address: <span class="val">{{ address }}</span></h3> 
@@ -63,28 +65,40 @@
 		(function () {
 			Polymer({
 				ready: function() {
+					this.endpoint = CabbageConf.endpoint;
 					this.appId = CabbageConf.applicationId;
 					this.isAdmin = CabbageConf.isAdmin;
-					
-					this.name = '1';
-					this.email = '2';
-					this.address = '3';
-					this.number = '4';
 
-					// this.$.getBCard.go();
+					this.$.getBCard.go();
 				},
 				refresh: function() {
-
+					if(this.appId) {
+						this.$.getBCard.go();
+					}
 				},
 				onEditButtonClick: function() {
 					MoreRouting.navigateTo('b-card-edit');		
 				},
 				onBCardGetResponse: function(data) {
-					var bCardData = data.detail.response;
-					// update data
+					this.bCardData = data.detail.response[0];
+					this.name = this.bCardData.name;
+					this.address = this.bCardData.address;
+					this.email = this.bCardData.email;
+					this.number = this.bCardData.number;
+					this.image = this.bCardData.image;
 				},
 				onBCardGetError: function() {
 					console.error('bcard | get data error');
+
+					if(this.$.cardStorage.value !== undefined) {
+						var bCardData = this.$.cardStorage.value;
+						
+						this.name = bCardData.name;
+						this.address = bCardData.address;
+						this.email = bCardData.email;
+						this.number = bCardData.number;
+						this.image = bCardData.image;				
+					}
 				}
 			});
 		})();
