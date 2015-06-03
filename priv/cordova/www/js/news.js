@@ -1,9 +1,11 @@
 var CabbageNews = {
 	pullInterval: 20*1000,
 	timerId: undefined,
+	appId: undefined,
 
 	init: function() {
 		console.log('cabbage-news | init');
+		this.appId = CabbageConf.applicationId;
 		this.start();
 	},
 	start: function() {
@@ -41,19 +43,19 @@ var CabbageNews = {
 	},
 	getNews: function() {
 		var self = this;
-		self.showNotification('Test notif', 'http://reddit.com');
-		self.start();
+		// self.showNotification('Test notif', 'http://reddit.com');
+		// self.start();
 
-		// $.get({
-		// 	type: 'GET',
-		// 	url: CabbageConf.endpoint + '/news'
-		// })
-		// .done(function(response) {
-		// 	self.showNotification('Test notif');
-		// 	self.start();
-		// })
-		// .fail(function() {
-		// 	console.log('cabbage-news | news load error')
-		// });
+		$.ajax({
+			type: 'GET',
+			url: CabbageConf.endpoint + '/news/byappid/' + this.appId + '/latest',
+		})
+		.done(function(response) {
+			self.showNotification(response.title, response.newsUrl);
+			self.start();
+		})
+		.fail(function() {
+			console.log('cabbage-news | news load error');
+		});
 	}
-}
+};

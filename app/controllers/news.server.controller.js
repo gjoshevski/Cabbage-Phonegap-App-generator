@@ -72,7 +72,7 @@ exports.delete = function(req, res) {
 /**
  * List of News
  */
-exports.list = function(req, res) { 
+exports.list = function(req, res) {
 	var appId = req.params.appId;
 		
 	News.find({ 'appId': appId }).sort('-created').populate('user', 'displayName').exec(function(err, news) {
@@ -85,6 +85,30 @@ exports.list = function(req, res) {
 		}
 	});
 };
+
+exports.latest = function(req, res) {
+	var appId = req.params.appId;
+		
+	News.find({ 'appId': appId }).sort('-created').populate('user', 'displayName').exec(function(err, news) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			var latest = undefined;
+			for(var i = 0; i < news.length; i++) {
+				if(latest === undefined) {
+					latest = news[i];
+				}
+				else if(latest.created < news[i].created) {
+					latest = news[i];
+				}
+			}
+			res.jsonp(latest);
+		}
+	});
+};
+
 
 /**
  * News middleware
