@@ -1,8 +1,8 @@
 'use strict';
 
 // Applications controller
-angular.module('applications').controller('ApplicationsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Applications', 'Config',
-	function($scope, $stateParams, $location, Authentication, Applications, Config,$http) {
+angular.module('applications').controller('ApplicationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Applications', 'Config' , '$http',
+	function($scope, $stateParams, $location, Authentication, Applications, Config, $http) {
 		$scope.authentication = Authentication;
         $scope.config = Config;
 		$scope.app = [];
@@ -100,14 +100,15 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 				name: this.application.name,
 				modules: this.application.modules,
 				admin: this.application.admin} ).
-			  success(function(data, status, headers, config) {
+			  success(function(data, status, headers) {
 			    $location.path(data.url);
 			  }).
-			  error(function(data, status, headers, config) {
+			  error(function(data, status, headers) {
 			  	 console.log(data);
 			  });
 			
 			
 		};
+		
 	}
 ]);
