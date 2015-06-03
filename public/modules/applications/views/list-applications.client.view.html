@@ -5,7 +5,7 @@
     <div class="list-group">
         <a data-ng-repeat="application in applications" data-ng-href="#!/applications/{{application._id}}" class="list-group-item">
 			<small class="list-group-item-text">
-				Posted on
+				Created
 				<span data-ng-bind="application.created | date:'medium'"></span>
 				by
 				<span data-ng-bind="application.user.displayName"></span>

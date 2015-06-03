@@ -16,38 +16,30 @@ angular.module('applications').factory('Config', ['$http',
                 'description':'Lorem ipsum bla bla'
             },
             {
-                'title': 'news',
+                'title': 'News',
                 'key': 'news',
                 'id': '2',
                 'description':'Lorem ipsum bla bla'
             },
             {
                 'title': 'QR Loyalty points',
-                'key': 'qrpoints',
+                'key': 'points',
                 'id': '3',
                 'description':'Lorem ipsum bla bla'
             },
             {
                 'title': 'Restaurant Menu',
-                'key': 'restoranmenus',
+                'key': 'menu',
                 'id': '4',
-                'description':'Lorem ipsum bla bla'
-            },
-            {
-                'title': 'Restaurant Menu Admin',
-                'key': 'restoranmenus-admin',
-                'id': '5',
-                'description':'Lorem ipsum bla bla'
-            },
-            {
-                'title': 'Business Card Admin',
-                'key': 'binfo-admin',
-                'id': '6',
                 'description':'Lorem ipsum bla bla'
             }
         ];
 
-
+        /*
+        modules:[mm,xx,zz]
+        admi:true/false;
+        userId:xxxx        
+        */
 
         return obj;
 }]);

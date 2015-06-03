@@ -27,6 +27,10 @@ var ApplicationSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
+	},
+	admin: {
+		type: Boolean,
+		default: false
 	}
 });
 

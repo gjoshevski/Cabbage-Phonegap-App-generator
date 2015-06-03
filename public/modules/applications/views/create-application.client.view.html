@@ -1,6 +1,6 @@
 <section data-ng-controller="ApplicationsController">
     <div class="page-header">
-        <h1>New Application</h1>
+        <h1>New Application Wizard of Oz</h1>
     </div>
     <div class="col-md-12">
         <form class="form-horizontal" data-ng-submit="create()" novalidate>
@@ -8,10 +8,10 @@
                 <div class="form-group">
                     <label class="control-label" for="name">Name of the applications</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="app.name" id="name" class="form-control" placeholder="Name" required>
+                        <input type="text" data-ng-model="application.name" id="name" class="form-control" placeholder="Name" required>
                     </div>
                 </div>
-                <hr></hr>
+
                 <div class="form-group">
                     <div class="col-md-12">
                     <label for="modules" class="control-label"> Select modules</label>
@@ -20,14 +20,18 @@
                         <div class="col-md-6"  ng-repeat="ta in config.modules">
                             <label class="checkbox-Modules">
                                 
-                                    <input type="checkbox" name="selectedTypeOfAdd[]" value="{{ta.id}}" 
-                                data-ng-checked="application.modules.indexOf(ta.id) > -1" data-ng-click="toggleSelection(ta.id, 1)"> {{ta.title}}
+                                    <input type="checkbox" name="selectedTypeOfAdd[]" value="{{ta.key}}" 
+                                data-ng-checked="application.modules.indexOf(ta.key) > -1" data-ng-click="toggleSelection(ta.key, 1)"> {{ta.title}}
                                
                             </label>
                          </div>
 
                 </div>
-                
+                <hr></hr>
+                 <label class="checkbox-Modules">
+                       Add admint rights: <input type="checkbox" ng-model="application.admin" name="admin" value="1"  ng-true-value="true" ng-false-value="false"></input>
+                </label>
+                <hr></hr>
                 <div class="form-group">
                     <input type="submit" value="Ok, lets go!" class="btn btn-default">
                 </div>

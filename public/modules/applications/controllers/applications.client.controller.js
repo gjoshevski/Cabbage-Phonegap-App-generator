@@ -9,22 +9,22 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 
 		
         $scope.toggleSelection = function toggleSelection(fruitName) {
-            if (!$scope.app.modules) {
-                $scope.app.modules = [];
+            if (!$scope.application.modules) {
+                $scope.application.modules = [];
             }
 
-            var idx = $scope.app.modules.indexOf(fruitName);
+            var idx = $scope.application.modules.indexOf(fruitName);
 
             // is currently selected
             if (idx > -1) {
-                $scope.app.modules.splice(idx, 1);
+                $scope.application.modules.splice(idx, 1);
             }
 
             // is newly selected
             else {
-                $scope.app.modules.push(fruitName);
+                $scope.application.modules.push(fruitName);
             }            
-            console.log($scope.app);
+            console.log($scope.application);
         };
 		
 
@@ -36,9 +36,12 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 			
 			// Create new Application object
 			var application = new Applications ({
-				name: this.application.name,				
+				name: this.application.name,
+				modules: this.application.modules,
+				admin: this.application.admin,				
 			});
-
+			
+			console.log(application);
 			// Redirect after save
 			application.$save(function(response) {
 				$location.path('applications/' + response._id);
@@ -48,6 +51,7 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
+			
 		};
 
 		// Remove existing Application
