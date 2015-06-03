@@ -7,6 +7,10 @@ module.exports = function(app) {
 	// News Routes
 	app.route('/news')
 		.post(news.create);
+
+	// News Routes
+	app.route('/news/byappid/:appId/latest')
+		.get(news.latest);	
 		
 	app.route('/news/byappid/:appId')
 		.get(news.list);
