@@ -1,8 +1,8 @@
 'use strict';
 
 // Applications controller
-angular.module('applications').controller('ApplicationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Applications', 'Config',
-	function($scope, $stateParams, $location, Authentication, Applications, Config) {
+angular.module('applications').controller('ApplicationsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Applications', 'Config',
+	function($scope, $stateParams, $location, Authentication, Applications, Config,$http) {
 		$scope.authentication = Authentication;
         $scope.config = Config;
 		$scope.app = [];
@@ -92,6 +92,22 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 			$scope.application = Applications.get({ 
 				applicationId: $stateParams.applicationId
 			});
+		};
+		
+		$scope.generate = function(){
+			$http.post('/get-app', 
+			{	appId:Authentication.user._id,
+				name: this.application.name,
+				modules: this.application.modules,
+				admin: this.application.admin} ).
+			  success(function(data, status, headers, config) {
+			    $location.path(data.url);
+			  }).
+			  error(function(data, status, headers, config) {
+			  	 console.log(data);
+			  });
+			
+			
 		};
 	}
 ]);

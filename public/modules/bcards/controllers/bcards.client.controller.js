@@ -9,12 +9,17 @@ angular.module('bcards').controller('BcardsController', ['$scope', '$stateParams
 		$scope.create = function() {
 			// Create new Bcard object
 			var bcard = new Bcards ({
-				name: this.name
+				name: this.bcard.name,
+				appId: Authentication.user._id,
+				address: this.bcard.address,
+				number: this.bcard.number,
+				image: this.bcard.image,
+				email: this.bcard.email
 			});
 
 			// Redirect after save
 			bcard.$save(function(response) {
-				$location.path('bcards/' + response._id);
+			//	$location.path('bcards/' + response._id);
 
 				// Clear form fields
 				$scope.name = '';
@@ -52,8 +57,11 @@ angular.module('bcards').controller('BcardsController', ['$scope', '$stateParams
 		};
 
 		// Find a list of Bcards
-		$scope.find = function() {
-			$scope.bcards = Bcards.query();
+		$scope.find = function() {			
+			$scope.bcards = Bcards.query({bcardId: Authentication.user._id}, function(bcards) {
+				    $scope.bcard = bcards.pop();
+					console.log(bcards);
+				});
 		};
 
 		// Find existing Bcard

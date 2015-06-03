@@ -12,7 +12,7 @@ module.exports = function(app) {
 		.get(bcards.list);
 
 	app.route('/bcards/:bcardId')
-		.get(bcards.read)
+	//	.get(bcards.read)
 		.put(bcards.update)
 		.delete(bcards.delete);
 

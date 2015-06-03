@@ -11,7 +11,7 @@
 			<i class="glyphicon glyphicon-trash"></i>
 		</a>
 		<a class="btn btn-primary" data-ng-click="generate();">
-			<i class="glyphicon glyphicon-trash"></i>
+			<i class="glyphicon glyphicon-download-alt"></i>
 		</a>
 	</div>
 	
@@ -25,17 +25,30 @@
 		  <div class="panel-body">
 			  <div ng-switch on="module">
 			    <div ng-switch-when="bcard">
-					<section data-ng-controller="BcardsController">
-					    <div class="page-header">
-					        <h1>New Bcard</h1>
-					    </div>
+					<div data-ng-controller="BcardsController">
 					    <div class="col-md-12">
-					        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+					        <form class="form-horizontal" data-ng-submit="create()" data-ng-init="find()" novalidate>
 					            <fieldset>
+									
+											<div class="panel panel-info"  ng-repeat="b in bacrds">
+												{{b.name}}
+											</div>
 					                <div class="form-group">
 					                    <label class="control-label" for="name">Name</label>
 					                    <div class="controls">
-					                        <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
+					                        <input type="text" data-ng-model="bcard.name" id="name" class="form-control" placeholder="Name" required>
+					                    </div>
+										<div class="controls">
+					                        <input type="text" data-ng-model="bcard.address" id="address" class="form-control" placeholder="address" required>
+					                    </div>
+										<div class="controls">
+					                        <input type="text" data-ng-model="bcard.number" id="number" class="form-control" placeholder="number" required>
+					                    </div>
+										<div class="controls">
+					                        <input type="text" data-ng-model="bcard.image" id="image" class="form-control" placeholder="image" required>
+					                    </div>
+										<div class="controls">
+					                        <input type="text" data-ng-model="bcard.email" id="email" class="form-control" placeholder="email" required>
 					                    </div>
 					                </div>
 					                <div class="form-group">
@@ -47,7 +60,7 @@
 					            </fieldset>
 					        </form>
 					    </div>
-					</section>
+					</div>
 			    </div>
 			    <div ng-switch-default>
 			          no additional config available
