@@ -102,7 +102,7 @@
 					var storageData = this.$.storage.value;
 					var res = undefined;
 					for(var i = 0; i < storageData.length; i++) {
-						if(storageData[i].id === parseInt(this.menuId)) {
+						if(storageData[i]._id === this.menuId) {
 							res = storageData[i];
 							break;
 						}

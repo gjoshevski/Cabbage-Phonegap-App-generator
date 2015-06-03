@@ -56,6 +56,7 @@ var CabbageNews = {
 		})
 		.fail(function() {
 			console.log('cabbage-news | news load error');
+			self.start();
 		});
 	}
 };
