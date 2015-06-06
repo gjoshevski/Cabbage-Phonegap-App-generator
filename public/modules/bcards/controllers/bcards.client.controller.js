@@ -20,7 +20,7 @@ angular.module('bcards').controller('BcardsController', ['$scope', '$stateParams
 			// Redirect after save
 			bcard.$save(function(response) {
 			//	$location.path('bcards/' + response._id);
-
+				$scope.status = "Infomrations saved";
 				// Clear form fields
 				$scope.name = '';
 			}, function(errorResponse) {
@@ -59,8 +59,9 @@ angular.module('bcards').controller('BcardsController', ['$scope', '$stateParams
 		// Find a list of Bcards
 		$scope.find = function() {			
 			$scope.bcards = Bcards.query({bcardId: Authentication.user._id}, function(bcards) {
-				    $scope.bcard = bcards.pop();
+				    $scope.bcard = bcards[0];
 					console.log(bcards);
+					console.log(bcards[0]);
 				});
 		};
 

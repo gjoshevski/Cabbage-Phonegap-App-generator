@@ -1,21 +1,26 @@
 'use strict';
 
 // News controller
-angular.module('news').controller('NewsController', ['$scope', '$stateParams', '$location', 'Authentication', 'News',
-	function($scope, $stateParams, $location, Authentication, News) {
+angular.module('news').controller('NewsController', ['$scope', '$stateParams', '$location', 'Authentication', 'News', '$http',
+	function($scope, $stateParams, $location, Authentication, News, $http) {
 		$scope.authentication = Authentication;
 
 		// Create new News
 		$scope.create = function() {
 			// Create new News object
 			var news = new News ({
-				name: this.name
+				title: this.name,
+				appId: Authentication.user._id,
+				user: Authentication.user,
+				newsUrl: this.newsUrl
 			});
 
 			// Redirect after save
 			news.$save(function(response) {
-				$location.path('news/' + response._id);
-
+				//$location.path('news/' + response._id);
+				
+				$scope.status = 'Saved';
+				location.reload();
 				// Clear form fields
 				$scope.name = '';
 			}, function(errorResponse) {
@@ -53,7 +58,18 @@ angular.module('news').controller('NewsController', ['$scope', '$stateParams', '
 
 		// Find a list of News
 		$scope.find = function() {
-			$scope.news = News.query();
+			
+			// Simple GET request example :
+			$http.get('/news/byappid/'+Authentication.user._id).
+			  success(function(data, status, headers, config) {
+			   $scope.news = data; 
+			   console.log(status);
+			  }).
+			  error(function(data, status, headers, config) {
+			   console.log(status);
+			  });
+			
+			//$scope.news = News.query({appid: Authentication.user._id});
 		};
 
 		// Find existing News
