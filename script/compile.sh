@@ -3,7 +3,7 @@
 MODULES_DIR="modules/"
 DESTINATION_DIR="priv/cordova/www/elements/"
 
-PROJ_DIR="/Users/viktorot/SchoolProjects/cabbage-core/"
+PROJ_DIR="/home/martin/Desktop/faks/cabbage/cabbage-core/"
 
 cd $PROJ_DIR
 

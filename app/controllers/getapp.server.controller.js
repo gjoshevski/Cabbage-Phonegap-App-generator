@@ -6,8 +6,8 @@ var swig  = require('swig');
 var async  = require('async');
 
 var util = {
-	serverRootPath: '/Users/viktorot/SchoolProjects/cabbage-core',
-	apk: '/priv/cordova/platforms/android/ant-build/MainActivity-debug.apk',
+	serverRootPath: '/home/martin/Desktop/faks/cabbage/cabbage-core',
+	apk: '/priv/cordova/platforms/android/build/outputs/apk/android-debug.apk',
 	outputDir: '/priv/cordova/www'
 	// outputDir: '/templates'
 };

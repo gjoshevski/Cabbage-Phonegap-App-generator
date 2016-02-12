@@ -101,7 +101,7 @@ angular.module('applications').controller('ApplicationsController', ['$scope', '
 				modules: this.application.modules,
 				admin: this.application.admin} ).
 			  success(function(data, status, headers) {
-			    $location.path(data.url);
+			    window.location.href= data.url;
 			  }).
 			  error(function(data, status, headers) {
 			  	 console.log(data);

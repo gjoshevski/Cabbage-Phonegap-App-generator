@@ -26,9 +26,19 @@
 	<script type="text/javascript">
 		document.addEventListener('polymer-ready', function() {
 
+			
+			
+			
+			
+			
+			
 			if(CabbageNews !== undefined) {
 				CabbageNews.init();
 			}
+			
+			
+			
+			
 
 			window.addEventListener('hashchange', function() {
 				if(window.location.hash.indexOf('/menu/edit') !== -1) {
@@ -67,6 +77,16 @@
 	
 
 		
+		<more-route name="qr" path="/qr"></more-route>
+		
+
+	
+
+		
+
+	
+
+		
 		<more-route name="menu" path="/menu">
 			<more-route name="menu-info" path="/:id"></more-route>
 			
@@ -74,12 +94,6 @@
 			<more-route name="menu-edit" path="/edit/:id"></more-route>
 			
 		</more-route>
-		
-
-	
-
-		
-		<more-route name="qr" path="/qr"></more-route>
 		
 
 	
@@ -102,16 +116,20 @@
 						
 
 						
-						<core-item label="Menu" route="menu">
-							<a href=" {{ urlFor('menu') }} "></a>
+						<core-item label="Qr" route="qr" >
+							<a href=" {{ urlFor('qr') }} "></a>
 						</core-item>
 						
 
 						
 
 						
-						<core-item label="Qr" route="qr" >
-							<a href=" {{ urlFor('qr') }} "></a>
+
+						
+
+						
+						<core-item label="Menu" route="menu">
+							<a href=" {{ urlFor('menu') }} "></a>
 						</core-item>
 						
 
@@ -124,7 +142,7 @@
 			<core-header-panel main>
 				<core-toolbar id="main-title" layout horizontal end>
 					<paper-icon-button icon="menu" id="navicon" onclick="document.getElementById('drawer').togglePanel()"></paper-icon-button>
-					<h1>CabbageApp</h1>
+					<h1>Napa - cabb</h1>
 				</core-toolbar>
 				<more-route-selector selectedParams="{{ params }}">
 					<core-pages>
@@ -144,6 +162,18 @@
 						
 
 						
+						<section route="qr">
+							<cabbage-qr></cabbage-qr>
+						</section>
+						
+
+						
+
+						
+
+						
+
+						
 						<section route="menu">
 							<cabbage-menu></cabbage-menu>
 						</section>
@@ -158,14 +188,6 @@
 							<cabbage-menu-item-edit menuId="{{ params.id }}"></cabbage-menu-item-edit>
 						</section>
 						
-						
-
-						
-
-						
-						<section route="qr">
-							<cabbage-qr></cabbage-qr>
-						</section>
 						
 
 						

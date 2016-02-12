@@ -1,0 +1,110 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<polymer-element name="cabbage-qr" attributes="">
+	<template>
+
+		<core-ajax  id="getPoints"
+					url="{{ endpoint }}/qrpoints/sumbyappanduser/{{ appId }}/{{ userId }}"
+					method="GET"
+					handleAs="json"
+					on-core-response="{{ onPointsDataReceived }}"
+					on-core-error="{{ onPointsDataError }}"></core-ajax>
+
+		<core-ajax  id="addPoints"
+					url="{{ endpoint }}/qrpoints"
+					method="POST"
+					handleAs="json"
+					contentType="application/x-www-form-urlencoded"
+					on-core-response="{{ onPointsUpdateResponse }}"
+					on-core-error="{{ onPointsUpdateError }}"></core-ajax>
+
+		<div id="wrapper">
+			<!-- <h3>Phone ID => {{ phoneId }}</h3> -->
+			<h3>You currently have {{ points }} points.</h3>
+			<h3>Code: {{ code }}</h3>
+			<paper-fab icon="input" on-click="{{ onScanQrClick }}"></paper-fab>
+		</div>
+		<style>
+			:host {
+				display: block;
+			}
+			#wrapper {
+				background-color: #eee;
+				margin: 50px auto 0px auto;
+				width: 50%;
+				font-size: 18px;
+				font-weight: 200;
+				line-height: 30px;
+				background-color: #eee;
+				border-radius: 6px;
+				padding: 60px;
+				position: relative;
+			}
+			paper-fab {
+				background-color: #FBC02D;
+				position: absolute;
+				bottom: 0px; right: 0px;
+				margin-bottom: 10px;
+				margin-right: 10px;
+			}
+		</style>
+	</template>
+	<script>
+		(function () {
+			Polymer({
+				code: '',
+				ready: function() {
+					this.points = -4;
+					this.code = '[nothing]';
+
+					this.endpoint = CabbageConf.endpoint;
+					this.appId = CabbageConf.applicationId;
+
+					// this.userId = '101';
+					var self = this;
+					setTimeout(function() {
+						window.plugins.imeiplugin.getImei(function(imei) {
+							self.userId = imei;
+							self.$.getPoints.go();
+						});
+					}, 1000);
+
+					CabbageQr.init();
+				},
+				getData: function() {
+					return {
+						'appId': this.appId,
+						'userImei': this.userId,
+						'points': 1
+				}	;
+				},	
+				onScanQrClick: function() {
+					var self = this;
+
+					var success = function(resultObj) {
+						self.code = resultObj.text;
+						self.$.addPoints.params = self.getData();
+						self.$.addPoints.go();
+					};
+					var error = function(result) { 
+						console.log(result);
+					};
+
+					CabbageQr.scan(success, error);
+				},
+				onPointsDataReceived: function(data) {
+					this.points = data.detail.response;
+				},
+				onPointsDataError: function() {
+					console.log('cabbage-qr | get points error');
+				},
+				onPointsUpdateResponse: function(data) {
+					this.points++;;
+				},
+				onPointsUpdateError: function() {
+					console.log('cabbage-qr | update points error');
+				}
+			});
+		})();
+	</script>
+</polymer-element>
